@@ -1,8 +1,8 @@
 package srvutil
 
 import (
-	"future/util/configutil"
 	"time"
+	"utils/configutil"
 
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/broker"

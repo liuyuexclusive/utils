@@ -6,11 +6,11 @@ import (
 	"errors"
 	"fmt"
 	user "future/srv/basic/proto/user"
-	"future/util/configutil"
-	"future/util/logutil"
 	"io/ioutil"
 	"strings"
 	"time"
+	"utils/configutil"
+	"utils/logutil"
 
 	"github.com/gin-gonic/gin"
 	"github.com/juju/ratelimit"

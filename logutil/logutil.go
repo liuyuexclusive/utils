@@ -2,9 +2,9 @@ package logutil
 
 import (
 	"fmt"
-	"future/util/configutil"
-	"future/util/elasticutil"
 	"time"
+	"utils/configutil"
+	"utils/elasticutil"
 
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/common/log"

@@ -1,7 +1,7 @@
 package elasticutil
 
 import (
-	"future/util/configutil"
+	"utils/configutil"
 
 	"github.com/olivere/elastic/v7"
 )

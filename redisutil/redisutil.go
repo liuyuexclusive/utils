@@ -1,7 +1,7 @@
 package redisutil
 
 import (
-	"future/util/configutil"
+	"utils/configutil"
 
 	"github.com/go-redis/redis"
 )
