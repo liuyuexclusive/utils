@@ -4,7 +4,11 @@
 
 package ws
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/gorilla/websocket"
+)
 
 // Hub maintains the set of active clients and broadcasts messages to the
 // clients.
@@ -20,6 +24,19 @@ type Hub struct {
 
 	// Unregister requests from clients.
 	unregister chan *Client
+}
+
+// Client is a middleman between the websocket connection and the hub.
+type Client struct {
+	hub *Hub
+
+	// The websocket connection.
+	conn *websocket.Conn
+
+	// Buffered channel of outbound messages.
+	send chan []byte
+
+	username string
 }
 
 type Broadcast struct {
