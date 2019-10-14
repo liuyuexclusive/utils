@@ -27,7 +27,7 @@ func client() (*api.Client, error) {
 	return client, nil
 }
 
-func set(c *Config) error {
+func Set(c *Config) error {
 	client, err := client()
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ func Get() (*Config, error) {
 
 	if kvPair == nil {
 		//172.16.210.250
-		set(&Config{
+		Set(&Config{
 			ConsulAddress: "172.16.210.250:8500",
 			NatsAddress:   "172.16.210.250:4222",
 			HostIP:        "172.16.210.250",
