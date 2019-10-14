@@ -1,4 +1,4 @@
-module utils
+module github.com/liuyuexclusive/utils
 
 go 1.13
 
