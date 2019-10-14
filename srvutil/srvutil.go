@@ -2,7 +2,7 @@ package srvutil
 
 import (
 	"time"
-	"utils/configutil"
+	"github.com/liuyuexclusive/utils/configutil"
 
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/broker"

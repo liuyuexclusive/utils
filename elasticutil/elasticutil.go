@@ -1,7 +1,7 @@
 package elasticutil
 
 import (
-	"utils/configutil"
+	"github.com/liuyuexclusive/utils/configutil"
 
 	"github.com/olivere/elastic/v7"
 )

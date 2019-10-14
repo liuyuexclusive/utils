@@ -3,8 +3,8 @@ package logutil
 import (
 	"fmt"
 	"time"
-	"utils/configutil"
-	"utils/elasticutil"
+	"github.com/liuyuexclusive/utils/configutil"
+	"github.com/liuyuexclusive/utils/elasticutil"
 
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/common/log"
