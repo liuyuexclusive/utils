@@ -1,7 +1,7 @@
 package redisutil
 
 import (
-	"github.com/liuyuexclusive/utils/configutil"
+	"utils/configutil"
 
 	"github.com/go-redis/redis"
 )

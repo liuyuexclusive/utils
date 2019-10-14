@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/liuyuexclusive/utils/configutil"
-	"github.com/liuyuexclusive/utils/logutil"
+	"utils/configutil"
+	"utils/logutil"
 
 	"github.com/gin-gonic/gin"
 	"github.com/juju/ratelimit"

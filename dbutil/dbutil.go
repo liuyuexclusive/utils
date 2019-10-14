@@ -1,7 +1,7 @@
 package dbutil
 
 import (
-	"github.com/liuyuexclusive/utils/configutil"
+	"utils/configutil"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql" //使用mysql数据库
