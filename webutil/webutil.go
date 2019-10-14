@@ -1,14 +1,13 @@
 package webutil
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
-	user "future/srv/basic/proto/user"
 	"io/ioutil"
 	"strings"
 	"time"
+
 	"github.com/liuyuexclusive/utils/configutil"
 	"github.com/liuyuexclusive/utils/logutil"
 
@@ -53,20 +52,20 @@ func RateLimite() gin.HandlerFunc {
 	}
 }
 
-func Validate() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		token := c.GetHeader("Authorization")
-		if token == "" {
-			token = c.Query("token")
-		}
-		res, err := user.NewUserService("go.micro.srv.basic", client.DefaultClient).Validate(context.TODO(), &user.ValidateRequest{Token: token})
-		if err != nil {
-			c.JSON(401, err.Error())
-			c.Abort()
-		}
-		c.Set("username", res.Name)
-	}
-}
+// func Validate() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		token := c.GetHeader("Authorization")
+// 		if token == "" {
+// 			token = c.Query("token")
+// 		}
+// 		res, err := user.NewUserService("go.micro.srv.basic", client.DefaultClient).Validate(context.TODO(), &user.ValidateRequest{Token: token})
+// 		if err != nil {
+// 			c.JSON(401, err.Error())
+// 			c.Abort()
+// 		}
+// 		c.Set("username", res.Name)
+// 	}
+// }
 
 func ReadBody(c *gin.Context, data interface{}) bool {
 	bytes, err := ioutil.ReadAll(c.Request.Body)
