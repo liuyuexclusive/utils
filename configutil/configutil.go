@@ -2,11 +2,10 @@ package configutil
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
+	"log"
 
 	"github.com/hashicorp/consul/api"
-	"github.com/sirupsen/logrus"
 )
 
 type Config struct {
@@ -19,69 +18,42 @@ type Config struct {
 	RedisAddress  string
 }
 
-func client() (*api.Client, error) {
-	client, err := api.NewClient(&api.Config{Scheme: "http", Address: config.ConsulAddress})
-	if err != nil {
-		return nil, err
-	}
-	return client, nil
+type Consul struct {
+	Address string
 }
 
-func set(c *Config) error {
-	fmt.Println(1111, c)
-	fmt.Println(c == nil)
-	var bytes []byte
-	var err error
-	if c == nil {
-		bytes, err = ioutil.ReadFile("init.json")
-		if err != nil {
-			return err
-		}
-	} else {
-		bytes, err = json.Marshal(c)
-		if err != nil {
-			return err
-		}
-	}
-
-	kvPair := &api.KVPair{Key: "future", Value: bytes}
-
-	client, err := client()
+func Client() (*api.Client, error) {
+	consulbytes, err := ioutil.ReadFile("consul.json")
 	if err != nil {
-		return err
+		log.Fatal(err)
 	}
 
-	client.KV().Put(kvPair, nil)
-	return nil
+	var consul Consul
+
+	err = json.Unmarshal(consulbytes, &consul)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	client, err := api.NewClient(&api.Config{Scheme: "http", Address: consul.Address})
+	return client, err
 }
 
 func MustGet() *Config {
 	config, err := Get()
 	if err != nil {
-		logrus.Error(err)
-		panic(err)
+		log.Fatal(err)
 	}
 	return config
 }
 
 func Get() (*Config, error) {
-	client, err := client()
+	client, err := Client()
 	if err != nil {
 		return nil, err
 	}
+
 	kvPair, _, err := client.KV().Get("future", nil)
-	if err != nil {
-		return nil, err
-	}
-
-	if kvPair == nil {
-		err = set(nil)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	kvPair, _, err = client.KV().Get("future", nil)
 	if err != nil {
 		return nil, err
 	}

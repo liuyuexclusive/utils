@@ -1,11 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
+
+	"github.com/liuyuexclusive/utils/configutil"
 
 	"github.com/hashicorp/consul/api"
 )
@@ -17,19 +18,7 @@ type Consul struct {
 func main() {
 	flag.Parse()
 
-	consulbytes, err := ioutil.ReadFile(consulFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var consul Consul
-
-	err = json.Unmarshal(consulbytes, &consul)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	client, err := api.NewClient(&api.Config{Scheme: "http", Address: consul.Address})
+	client, err := configutil.Client()
 
 	if err != nil {
 		log.Fatal(err)
@@ -50,11 +39,8 @@ func main() {
 	fmt.Println("init done!")
 }
 
-var consulFile string
-
 var configFile string
 
 func init() {
-	flag.StringVar(&consulFile, "consul", "consul.json", "consul address file path")
 	flag.StringVar(&configFile, "config", "appconfig.json", "config file path")
 }
