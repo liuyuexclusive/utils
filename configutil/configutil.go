@@ -3,9 +3,8 @@ package configutil
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 
-	"github.com/hashicorp/consul/api"
+	"github.com/sirupsen/logrus"
 )
 
 type Config struct {
@@ -18,49 +17,24 @@ type Config struct {
 	RedisAddress  string
 }
 
-type Consul struct {
-	Address string
-}
-
-func Client() (*api.Client, error) {
-	consulbytes, err := ioutil.ReadFile("consul.json")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var consul Consul
-
-	err = json.Unmarshal(consulbytes, &consul)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	client, err := api.NewClient(&api.Config{Scheme: "http", Address: consul.Address})
-	return client, err
-}
-
 func MustGet() *Config {
 	config, err := Get()
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
+		return nil
 	}
 	return config
 }
 
 func Get() (*Config, error) {
-	client, err := Client()
-	if err != nil {
-		return nil, err
-	}
-
-	kvPair, _, err := client.KV().Get("future", nil)
+	byets, err := ioutil.ReadFile("appconfig.json")
 	if err != nil {
 		return nil, err
 	}
 
 	var config Config
 
-	err = json.Unmarshal(kvPair.Value, &config)
+	err = json.Unmarshal(byets, &config)
 	if err != nil {
 		return nil, err
 	}
