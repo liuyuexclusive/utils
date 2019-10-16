@@ -13,7 +13,6 @@ type Config struct {
 	ConsulAddress string
 	NatsAddress   string
 	HostIP        string
-	Port          string
 	APIPort       string
 	ElasticURL    string
 	ConnStr       string
@@ -21,15 +20,6 @@ type Config struct {
 }
 
 func client() (*api.Client, error) {
-	bytes, err := ioutil.ReadFile("init.json")
-	if err != nil {
-		return nil, err
-	}
-	var config Config
-	err = json.Unmarshal(bytes, &config)
-	if err != nil {
-		return nil, err
-	}
 	client, err := api.NewClient(&api.Config{Scheme: "http", Address: config.ConsulAddress})
 	if err != nil {
 		return nil, err
@@ -85,7 +75,10 @@ func Get() (*Config, error) {
 	}
 
 	if kvPair == nil {
-		set(nil)
+		err = set(nil)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	kvPair, _, err = client.KV().Get("future", nil)
