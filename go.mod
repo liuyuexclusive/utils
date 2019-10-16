@@ -15,6 +15,8 @@ require (
 	github.com/olivere/elastic/v7 v7.0.7
 	github.com/prometheus/common v0.7.0
 	github.com/sirupsen/logrus v1.4.2
+	github.com/stretchr/testify v1.3.1-0.20190311161405-34c6fa2dc709 // indirect
 	github.com/swaggo/gin-swagger v1.2.0
+	golang.org/x/sys v0.0.0-20191010194322-b09406accb47 // indirect
 	gopkg.in/sohlich/elogrus.v7 v7.0.0
 )

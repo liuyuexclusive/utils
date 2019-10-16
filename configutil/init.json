@@ -1,0 +1,10 @@
+{
+    "ConsulAddress": "172.16.210.250:8500",
+    "NatsAddress": "172.16.210.250:4222",
+    "HostIP": "172.16.210.250",
+    "Port": "9090",
+    "APIPort": "9000",
+    "ElasticURL": "http://172.16.210.250:9200",
+    "ConnStr": "root:123456@tcp(172.16.210.250:3306)/future?charset=utf8&parseTime=True&loc=Local",
+    "RedisAddress": "172.16.210.250:6379"
+}

@@ -3,6 +3,7 @@ package configutil
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 
 	"github.com/hashicorp/consul/api"
 	"github.com/sirupsen/logrus"
@@ -20,23 +21,46 @@ type Config struct {
 }
 
 func client() (*api.Client, error) {
-	client, err := api.NewClient(&api.Config{Scheme: "http", Address: fmt.Sprintf("%s:%s", "172.16.210.250", "8500")})
+	bytes, err := ioutil.ReadFile("init.json")
+	if err != nil {
+		return nil, err
+	}
+	var config Config
+	err = json.Unmarshal(bytes, &config)
+	if err != nil {
+		return nil, err
+	}
+	client, err := api.NewClient(&api.Config{Scheme: "http", Address: config.ConsulAddress})
 	if err != nil {
 		return nil, err
 	}
 	return client, nil
 }
 
-func Set(c *Config) error {
+func set(c *Config) error {
+	fmt.Println(1111, c)
+	fmt.Println(c == nil)
+	var bytes []byte
+	var err error
+	if c == nil {
+		bytes, err = ioutil.ReadFile("init.json")
+		if err != nil {
+			return err
+		}
+	} else {
+		bytes, err = json.Marshal(c)
+		if err != nil {
+			return err
+		}
+	}
+
+	kvPair := &api.KVPair{Key: "future", Value: bytes}
+
 	client, err := client()
 	if err != nil {
 		return err
 	}
-	bytes, err := json.Marshal(c)
-	if err != nil {
-		return err
-	}
-	kvPair := &api.KVPair{Key: "future", Value: bytes}
+
 	client.KV().Put(kvPair, nil)
 	return nil
 }
@@ -61,17 +85,7 @@ func Get() (*Config, error) {
 	}
 
 	if kvPair == nil {
-		//172.16.210.250
-		Set(&Config{
-			ConsulAddress: "172.16.210.250:8500",
-			NatsAddress:   "172.16.210.250:4222",
-			HostIP:        "172.16.210.250",
-			Port:          "9090",
-			APIPort:       "9000",
-			ElasticURL:    fmt.Sprintf("http://%s:9200", "172.16.210.250"),
-			ConnStr:       fmt.Sprintf("root:123456@tcp(%s:3306)/future?charset=utf8&parseTime=True&loc=Local", "172.16.210.250"),
-			RedisAddress:  fmt.Sprintf("%s:6379", "172.16.210.250"),
-		})
+		set(nil)
 	}
 
 	kvPair, _, err = client.KV().Get("future", nil)
