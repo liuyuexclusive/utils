@@ -19,8 +19,8 @@ func TestGet(t *testing.T) {
 				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if got.ConsulAddress != "172.16.210.250:8500" {
-				t.Errorf("Get() error = %v, wantErr %v", got.ConsulAddress, "172.16.210.250:8500")
+			if got.ConsulAddress != "172.16.60.48:8500" {
+				t.Errorf("Get() error = %v, wantErr %v", got.ConsulAddress, "172.16.60.48:8500")
 				return
 			}
 			// if !reflect.DeepEqual(got, tt.want) {
