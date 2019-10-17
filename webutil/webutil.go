@@ -96,6 +96,8 @@ type Starter interface {
 }
 
 func Startup(name string, address string, starter Starter) error {
+	logutil.LogToElastic(name)
+
 	if name == "" {
 		return errors.New("请输入服务名称")
 	}
@@ -123,7 +125,6 @@ func Startup(name string, address string, starter Starter) error {
 		return fmt.Errorf("服务初始化失败:%w", err)
 	}
 
-	logutil.LogToElastic()
 	router := gin.Default()
 
 	router.Use(

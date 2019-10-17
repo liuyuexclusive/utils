@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Send Send
 func Send(path string, from string, to []string, title, contents string) error {
 	if h, ok := m[path]; ok {
 		h.broadcast <- &Broadcast{From: from, To: to, Title: title, Content: contents}
@@ -16,6 +17,7 @@ func Send(path string, from string, to []string, title, contents string) error {
 
 var m = make(map[string]*Hub)
 
+// Serve Serve
 func Serve(e *gin.Engine, path string) error {
 	if _, ok := m[path]; ok {
 		return errors.New("重复的path")

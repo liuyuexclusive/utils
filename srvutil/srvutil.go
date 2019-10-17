@@ -2,7 +2,9 @@ package srvutil
 
 import (
 	"time"
+
 	"github.com/liuyuexclusive/utils/configutil"
+	"github.com/liuyuexclusive/utils/logutil"
 
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/broker"
@@ -17,6 +19,7 @@ type Starter interface {
 }
 
 func Startup(name string, starter Starter) {
+	logutil.LogToElastic(name)
 
 	// New Service
 	service := micro.NewService(

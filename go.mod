@@ -5,6 +5,7 @@ go 1.13
 require (
 	github.com/ahmetb/go-linq v3.0.0+incompatible
 	github.com/gin-gonic/gin v1.4.0
+	github.com/go-kit/kit v0.9.0
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/gorilla/websocket v1.4.1
 	github.com/hashicorp/consul/api v1.2.0

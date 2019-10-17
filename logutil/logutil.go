@@ -2,24 +2,23 @@ package logutil
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/liuyuexclusive/utils/configutil"
 	"github.com/liuyuexclusive/utils/elasticutil"
 
 	"github.com/gin-gonic/gin"
-	"github.com/prometheus/common/log"
 	"github.com/sirupsen/logrus"
 	elogrus "gopkg.in/sohlich/elogrus.v7"
 )
 
 // LogToElastic logrus to elastic
-func LogToElastic() error {
+func LogToElastic(index string) error {
 	client, err := elasticutil.Client()
 	if err != nil {
-		log.Error(err)
+		logrus.Error(err)
+		return err
 	}
-	hook, err := elogrus.NewElasticHook(client, configutil.MustGet().ElasticURL, logrus.InfoLevel, "log-future-"+time.Now().Format("20060102"))
+	hook, err := elogrus.NewElasticHook(client, configutil.MustGet().ElasticURL, logrus.InfoLevel, index)
 	if err != nil {
 		return fmt.Errorf("写入elistic日志失败: %w", err)
 	}

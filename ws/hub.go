@@ -39,6 +39,7 @@ type Client struct {
 	username string
 }
 
+// Broadcast Broadcast
 type Broadcast struct {
 	From    string   `json:"from"`
 	To      []string `json:"to"`
