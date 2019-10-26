@@ -16,8 +16,6 @@ import (
 	"github.com/micro/go-micro/broker"
 	"github.com/micro/go-micro/broker/nats"
 	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/consul"
 	"github.com/micro/go-micro/web"
 	"github.com/sirupsen/logrus"
 
@@ -108,9 +106,9 @@ func Startup(name string, address string, starter Starter) error {
 	options := []web.Option{
 		web.Name(name),
 		web.Version("latest"),
-		web.Registry(consul.NewRegistry(registry.Addrs(config.ConsulAddress))),
-		web.RegisterTTL(time.Second * 30),
-		web.RegisterInterval(time.Second * 15),
+		// web.Registry(consul.NewRegistry(registry.Addrs(config.ConsulAddress))),
+		// web.RegisterTTL(time.Second * 30),
+		// web.RegisterInterval(time.Second * 15),
 	}
 
 	if address != "" {
@@ -135,11 +133,11 @@ func Startup(name string, address string, starter Starter) error {
 	var swaggerPath, swaggerURL string
 	if address != "" {
 		swaggerPath = "/swagger/*any"
-		swaggerURL = fmt.Sprintf("http://%s:%s/swagger/doc.json", config.HostIP, config.APIPort)
+		swaggerURL = fmt.Sprintf("http://%s:%s/swagger/doc.json", address, config.APIPort)
 	} else {
 		head := strings.TrimPrefix(name, "go.micro.web.")
 		swaggerPath = fmt.Sprintf("/%s/swagger/*any", head)
-		swaggerURL = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", config.HostIP, config.APIPort, head)
+		swaggerURL = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", address, config.APIPort, head)
 	}
 
 	UseSwagger(swaggerPath, swaggerURL, router)

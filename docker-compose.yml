@@ -10,67 +10,44 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
     volumes:
       - /Users/liuyu/docker_volumes/mysql:/var/lib/mysql
+      
   consul: 
     image: consul
     ports:
       - 8500:8500
     volumes:
       - /Users/liuyu/docker_volumes/consul:/consul/data
+
   nats: 
     image: nats
     ports:
       - 4222:4222
       - 8222:8222
-  micro_api:
-    image: microhq/micro
-    command: api
-    depends_on:
-      - consul
-    ports:
-      - 9000:8080
-    environment:
-      MICRO_ADDRESS: ":8080"
-      MICRO_REGISTRY: "consul"
-      MICRO_REGISTRY_ADDRESS: "172.16.60.48:8500"
-      MICRO_API_HANDLER: "http"
-      MICRO_API_NAMESPACE: "go.micro.web" 
       
-  micro_web:
-    image: microhq/micro
-    command: web
-    depends_on:
-      - consul
-    ports:
-      - 8082:8082
+  elastic:
+    image: elasticsearch:7.4.0
+    ports: 
+      - 9200:9200
     environment:
-      MICRO_ADDRESS: ":8082"
-      MICRO_REGISTRY: "consul"
-      MICRO_REGISTRY_ADDRESS: "172.16.60.48:8500"
+      discovery.type: "single-node"
+      ES_JAVA_OPTS: " -Xms256m -Xmx256m"
+    volumes:
+      - /Users/liuyu/docker_volumes/elastic:/usr/share/elasticsearch/data
 
-  # elastic:
-  #   image: elasticsearch:7.4.0
-  #   ports: 
-  #     - 9200:9200
-  #   environment:
-  #     discovery.type: "single-node"
-  #     ES_JAVA_OPTS: " -Xms256m -Xmx256m"
-  #   volumes:
-  #     - /Users/liuyu/docker_volumes/elastic:/usr/share/elasticsearch/data
+  kibana:
+    image: kibana:7.4.0
+    ports:
+      - 5601:5601
+    volumes:
+      - /Users/liuyu/docker_volumes/kibana.yml:/usr/share/kibana/config/kibana.yml
+    # docker cp /Users/liuyu/kibana.yml crawler_kibana_1:/usr/share/kibana/config/kibana.yml
 
-  # kibana:
-  #   image: kibana:7.4.0
-  #   ports:
-  #     - 5601:5601
-  #   volumes:
-  #     - /Users/liuyu/docker_volumes/kibana.yml:/usr/share/kibana/config/kibana.yml
-  #   # docker cp /Users/liuyu/kibana.yml crawler_kibana_1:/usr/share/kibana/config/kibana.yml
-
-  # redis:
-  #   image: redis
-  #   ports:
-  #     - 6379:6379
-  #   volumes:
-  #     - /Users/liuyu/docker_volumes/redis:/data
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - /Users/liuyu/docker_volumes/redis:/data
 
   # gogs:
   #   image: gogs/gogs
@@ -100,6 +77,33 @@ services:
   #   volumes:
   #     - /var/run/docker.sock:/var/run/docker.sock
   #     - /Users/liuyu/docker_volumes/drone:/data
+
+  # micro_api:
+  #   # image: microhq/micro
+  #   image: micro/micro
+  #   command: api
+  #   depends_on:
+  #     - consul
+  #   ports:
+  #     - 9000:8080
+  #   environment:
+  #     # MICRO_ADDRESS: ":8080"
+  #     # MICRO_REGISTRY: "consul"
+  #     MICRO_REGISTRY_ADDRESS: "172.16.60.48:8500"
+  #     MICRO_API_HANDLER: "http"
+  #     MICRO_API_NAMESPACE: "go.micro.web" 
+
+  # micro_web:
+  #   image: microhq/micro
+  #   command: web
+  #   depends_on:
+  #     - consul
+  #   ports:
+  #     - 8082:8082
+  #   environment:
+  #     MICRO_ADDRESS: ":8082"
+  #     MICRO_REGISTRY: "consul"
+  #     MICRO_REGISTRY_ADDRESS: "172.16.60.48:8500"
 
 # networks:
 #   default:
