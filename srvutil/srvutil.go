@@ -10,7 +10,7 @@ import (
 	"github.com/micro/go-micro/broker"
 	"github.com/micro/go-micro/broker/nats"
 	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/consul"
+	"github.com/micro/go-micro/registry/etcd"
 	"github.com/sirupsen/logrus"
 )
 
@@ -25,7 +25,7 @@ func Startup(name string, starter Starter) {
 	service := micro.NewService(
 		micro.Name(name),
 		micro.Version("latest"),
-		micro.Registry(consul.NewRegistry(registry.Addrs(configutil.MustGet().ConsulAddress))),
+		micro.Registry(etcd.NewRegistry(registry.Addrs(configutil.MustGet().ETCDAddress))),
 		micro.RegisterTTL(time.Second*30),
 		micro.RegisterInterval(time.Second*15),
 		micro.Broker(nats.NewBroker(broker.Addrs(configutil.MustGet().NatsAddress))),

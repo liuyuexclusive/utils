@@ -8,6 +8,7 @@ import (
 )
 
 type Config struct {
+	ETCDAddress   string
 	ConsulAddress string
 	NatsAddress   string
 	HostIP        string

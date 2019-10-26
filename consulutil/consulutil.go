@@ -8,7 +8,6 @@ import (
 )
 
 func Client() (*api.Client, error) {
-
 	client, err := api.NewClient(&api.Config{Scheme: "http", Address: configutil.MustGet().ConsulAddress})
 	return client, err
 }

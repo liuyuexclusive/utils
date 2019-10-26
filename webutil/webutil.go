@@ -8,6 +8,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/micro/go-micro/registry"
+	"github.com/micro/go-micro/registry/etcd"
+
 	"github.com/liuyuexclusive/utils/configutil"
 	"github.com/liuyuexclusive/utils/logutil"
 
@@ -106,9 +109,9 @@ func Startup(name string, address string, starter Starter) error {
 	options := []web.Option{
 		web.Name(name),
 		web.Version("latest"),
-		// web.Registry(consul.NewRegistry(registry.Addrs(config.ConsulAddress))),
-		// web.RegisterTTL(time.Second * 30),
-		// web.RegisterInterval(time.Second * 15),
+		web.Registry(etcd.NewRegistry(registry.Addrs(config.ETCDAddress))),
+		web.RegisterTTL(time.Second * 30),
+		web.RegisterInterval(time.Second * 15),
 	}
 
 	if address != "" {
