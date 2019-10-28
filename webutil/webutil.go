@@ -103,8 +103,8 @@ type Options struct {
 	IsAllowOrigin bool
 	//是否限流 默认为true
 	IsRateLimite bool
-	//服务地址 默认为空
-	Address string
+	//端口 默认为空
+	Port string
 }
 
 type Option func(ops *Options)
@@ -114,7 +114,7 @@ func Startup(name string, starter Starter, opts ...Option) error {
 		IsLogToES:     false,
 		IsAllowOrigin: true,
 		IsRateLimite:  true,
-		Address:       "",
+		Port:          "",
 	}
 
 	for _, opt := range opts {
@@ -140,8 +140,8 @@ func Startup(name string, starter Starter, opts ...Option) error {
 		web.RegisterInterval(time.Second * 15),
 	}
 
-	if options.Address != "" {
-		webOptions = append(webOptions, web.Address(options.Address))
+	if options.Port != "" {
+		webOptions = append(webOptions, web.Address(options.Port))
 	}
 
 	service := web.NewService(
@@ -167,9 +167,9 @@ func Startup(name string, starter Starter, opts ...Option) error {
 	}
 
 	var swaggerPath, swaggerURL string
-	if options.Address != "" {
+	if options.Port != "" {
 		swaggerPath = "/swagger/*any"
-		swaggerURL = fmt.Sprintf("http://%s%s/swagger/doc.json", config.HostIP, options.Address)
+		swaggerURL = fmt.Sprintf("http://%s%s/swagger/doc.json", config.HostIP, options.Port)
 	} else {
 		head := strings.TrimPrefix(name, "go.micro.web.")
 		swaggerPath = fmt.Sprintf("/%s/swagger/*any", head)
