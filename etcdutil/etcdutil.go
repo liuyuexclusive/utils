@@ -1,39 +1,35 @@
 package etcdutil
 
 import (
-	"context"
-	"fmt"
 	"time"
 
 	"github.com/liuyuexclusive/utils/configutil"
+	"github.com/sirupsen/logrus"
 
 	"go.etcd.io/etcd/clientv3"
 )
 
-func kv() (clientv3.KV, error) {
+// Open 操作etcd kv
+func Open(fn func(kv clientv3.KV) error) error {
 	config := clientv3.Config{
 		Endpoints:   []string{configutil.MustGet().ETCDAddress},
 		DialTimeout: 10 * time.Second,
 	}
 	client, err := clientv3.New(config)
 	if err != nil {
-		return nil, err
+		logrus.Error(err)
+		return nil
 	}
 	defer client.Close()
 
 	kv := clientv3.NewKV(client)
 
-	return kv, nil
-}
-
-func test() {
-	kv, err := kv()
+	err = fn(kv)
 
 	if err != nil {
-		panic(err)
+		logrus.Error(err)
+		return err
 	}
 
-	kv.Put(context.TODO(), "test", "aaa")
-
-	fmt.Println(kv.Get(context.TODO(), "test"))
+	return nil
 }

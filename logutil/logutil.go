@@ -12,7 +12,7 @@ import (
 )
 
 // LogToElastic logrus to elastic
-func LogToElastic(index string) error {
+func LogToES(index string) error {
 	client, err := elasticutil.Client()
 	if err != nil {
 		logrus.Error(err)

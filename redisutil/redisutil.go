@@ -2,6 +2,7 @@ package redisutil
 
 import (
 	"github.com/liuyuexclusive/utils/configutil"
+	"github.com/sirupsen/logrus"
 
 	"github.com/go-redis/redis"
 )
@@ -15,6 +16,7 @@ func Open(f func(client *redis.Client) error) error {
 	})
 	defer client.Close()
 	if err := f(client); err != nil {
+		logrus.Error(err)
 		return err
 	}
 	return nil

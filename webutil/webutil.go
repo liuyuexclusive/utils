@@ -96,8 +96,34 @@ type Starter interface {
 	Start(engine *gin.Engine)
 }
 
-func Startup(name string, address string, starter Starter) error {
-	logutil.LogToElastic(name)
+type Options struct {
+	//是否记录日志到ES 默认为false
+	IsLogToES bool
+	//是否允许跨域 默认为true
+	IsAllowOrigin bool
+	//是否限流 默认为true
+	IsRateLimite bool
+	//服务地址 默认为空
+	Address string
+}
+
+type Option func(ops *Options)
+
+func Startup(name string, starter Starter, opts ...Option) error {
+	options := &Options{
+		IsLogToES:     false,
+		IsAllowOrigin: true,
+		IsRateLimite:  true,
+		Address:       "",
+	}
+
+	for _, opt := range opts {
+		opt(options)
+	}
+
+	if options.IsLogToES {
+		logutil.LogToES(name)
+	}
 
 	if name == "" {
 		return errors.New("请输入服务名称")
@@ -106,7 +132,7 @@ func Startup(name string, address string, starter Starter) error {
 	config := configutil.MustGet()
 	client.DefaultClient.Init(client.Broker(nats.NewBroker(broker.Addrs(config.NatsAddress))))
 
-	options := []web.Option{
+	webOptions := []web.Option{
 		web.Name(name),
 		web.Version("latest"),
 		web.Registry(etcd.NewRegistry(registry.Addrs(config.ETCDAddress))),
@@ -114,12 +140,12 @@ func Startup(name string, address string, starter Starter) error {
 		web.RegisterInterval(time.Second * 15),
 	}
 
-	if address != "" {
-		options = append(options, web.Address(address))
+	if options.Address != "" {
+		webOptions = append(webOptions, web.Address(options.Address))
 	}
 
 	service := web.NewService(
-		options...,
+		webOptions...,
 	)
 
 	if err := service.Init(); err != nil {
@@ -128,15 +154,22 @@ func Startup(name string, address string, starter Starter) error {
 
 	router := gin.Default()
 
-	router.Use(
-		AllowOrigin(),
-		RateLimite(),
-	)
+	if options.IsAllowOrigin {
+		router.Use(
+			AllowOrigin(),
+		)
+	}
+
+	if options.IsRateLimite {
+		router.Use(
+			RateLimite(),
+		)
+	}
 
 	var swaggerPath, swaggerURL string
-	if address != "" {
+	if options.Address != "" {
 		swaggerPath = "/swagger/*any"
-		swaggerURL = fmt.Sprintf("http://%s:%s/swagger/doc.json", config.HostIP, config.APIPort)
+		swaggerURL = fmt.Sprintf("http://%s:%s/swagger/doc.json", config.HostIP, options.Address)
 	} else {
 		head := strings.TrimPrefix(name, "go.micro.web.")
 		swaggerPath = fmt.Sprintf("/%s/swagger/*any", head)

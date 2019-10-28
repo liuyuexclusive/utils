@@ -14,12 +14,29 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+type Options struct {
+	// 是否记录日志到ES 默认为false
+	IsLogToES bool
+}
+
+type Option func(ops *Options)
+
 type Starter interface {
 	Start(s micro.Service)
 }
 
-func Startup(name string, starter Starter) {
-	logutil.LogToElastic(name)
+func Startup(name string, starter Starter, opts ...Option) {
+	options := &Options{
+		IsLogToES: false,
+	}
+
+	for _, opt := range opts {
+		opt(options)
+	}
+
+	if options.IsLogToES {
+		logutil.LogToES(name)
+	}
 
 	// New Service
 	service := micro.NewService(

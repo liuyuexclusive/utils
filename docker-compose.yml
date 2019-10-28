@@ -19,36 +19,12 @@ services:
     ports:
       - 2379:2379
       - 2380:2380
+      
   nats: 
     image: nats
     ports:
       - 4222:4222
-      - 8222:8222
-      
-  elastic:
-    image: elasticsearch:7.4.0
-    ports: 
-      - 9200:9200
-    environment:
-      discovery.type: "single-node"
-      ES_JAVA_OPTS: " -Xms256m -Xmx256m"
-    volumes:
-      - /Users/liuyu/docker_volumes/elastic:/usr/share/elasticsearch/data
-
-  kibana:
-    image: kibana:7.4.0
-    ports:
-      - 5601:5601
-    volumes:
-      - /Users/liuyu/docker_volumes/kibana.yml:/usr/share/kibana/config/kibana.yml
-    # docker cp /Users/liuyu/kibana.yml crawler_kibana_1:/usr/share/kibana/config/kibana.yml
-
-  redis:
-    image: redis
-    ports:
-      - 6379:6379
-    volumes:
-      - /Users/liuyu/docker_volumes/redis:/data
+      - 8222:8222     
 
   micro_api:
     image: microhq/micro
@@ -76,6 +52,31 @@ services:
       MICRO_REGISTRY: "etcd"
       MICRO_REGISTRY_ADDRESS: "172.16.60.48:2379"
 
+  # redis:
+  #   image: redis
+  #   ports:
+  #     - 6379:6379
+  #   volumes:
+  #     - /Users/liuyu/docker_volumes/redis:/data
+
+  # elastic:
+  #   image: elasticsearch:7.4.0
+  #   ports: 
+  #     - 9200:9200
+  #   environment:
+  #     discovery.type: "single-node"
+  #     ES_JAVA_OPTS: " -Xms256m -Xmx256m"
+  #   volumes:
+  #     - /Users/liuyu/docker_volumes/elastic:/usr/share/elasticsearch/data
+
+  # kibana:
+  #   image: kibana:7.4.0
+  #   ports:
+  #     - 5601:5601
+  #   volumes:
+  #     - /Users/liuyu/docker_volumes/kibana.yml:/usr/share/kibana/config/kibana.yml
+  #   # docker cp /Users/liuyu/kibana.yml crawler_kibana_1:/usr/share/kibana/config/kibana.yml
+
   # consul: 
   #   image: consul
   #   ports:
@@ -92,7 +93,6 @@ services:
   #     - 22:22
   #   volumes:
   #     - /Users/liuyu/docker_volumes/gogs:/data
-
 
   # drone:
   #   image: drone/drone:1
