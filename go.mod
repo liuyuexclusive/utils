@@ -37,6 +37,7 @@ require (
 	github.com/prometheus/common v0.7.0
 	github.com/sirupsen/logrus v1.4.2
 	github.com/swaggo/gin-swagger v1.2.0
+	go.etcd.io/etcd v3.3.17+incompatible
 	go.uber.org/zap v1.11.0 // indirect
 	golang.org/x/mobile v0.0.0-20190806162312-597adff16ade // indirect
 	golang.org/x/net v0.0.0-20191021144547-ec77196f6094 // indirect

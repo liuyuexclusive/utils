@@ -136,11 +136,11 @@ func Startup(name string, address string, starter Starter) error {
 	var swaggerPath, swaggerURL string
 	if address != "" {
 		swaggerPath = "/swagger/*any"
-		swaggerURL = fmt.Sprintf("http://%s:%s/swagger/doc.json", address, config.APIPort)
+		swaggerURL = fmt.Sprintf("http://%s:%s/swagger/doc.json", config.HostIP, config.APIPort)
 	} else {
 		head := strings.TrimPrefix(name, "go.micro.web.")
 		swaggerPath = fmt.Sprintf("/%s/swagger/*any", head)
-		swaggerURL = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", address, config.APIPort, head)
+		swaggerURL = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", config.HostIP, config.APIPort, head)
 	}
 
 	UseSwagger(swaggerPath, swaggerURL, router)

@@ -19,14 +19,6 @@ services:
     ports:
       - 2379:2379
       - 2380:2380
-      
-  # consul: 
-  #   image: consul
-  #   ports:
-  #     - 8500:8500
-  #   volumes:
-  #     - /Users/liuyu/docker_volumes/consul:/consul/data
-
   nats: 
     image: nats
     ports:
@@ -58,6 +50,39 @@ services:
     volumes:
       - /Users/liuyu/docker_volumes/redis:/data
 
+  micro_api:
+    image: microhq/micro
+    command: api
+    depends_on:
+      - etcd
+    ports:
+      - 9000:8080
+    environment:
+      MICRO_ADDRESS: ":8080"
+      MICRO_REGISTRY: "etcd"
+      MICRO_REGISTRY_ADDRESS: "172.16.60.48:2379"
+      MICRO_API_HANDLER: "http"
+      MICRO_API_NAMESPACE: "go.micro.web" 
+
+  micro_web:
+    image: microhq/micro
+    command: web
+    depends_on:
+      - etcd
+    ports:
+      - 8082:8082
+    environment:
+      MICRO_ADDRESS: ":8082"
+      MICRO_REGISTRY: "etcd"
+      MICRO_REGISTRY_ADDRESS: "172.16.60.48:2379"
+
+  # consul: 
+  #   image: consul
+  #   ports:
+  #     - 8500:8500
+  #   volumes:
+  #     - /Users/liuyu/docker_volumes/consul:/consul/data
+
   # gogs:
   #   image: gogs/gogs
   #   depends_on:
@@ -86,33 +111,6 @@ services:
   #   volumes:
   #     - /var/run/docker.sock:/var/run/docker.sock
   #     - /Users/liuyu/docker_volumes/drone:/data
-
-  # micro_api:
-  #   # image: microhq/micro
-  #   image: micro/micro
-  #   command: api
-  #   depends_on:
-  #     - consul
-  #   ports:
-  #     - 9000:8080
-  #   environment:
-  #     # MICRO_ADDRESS: ":8080"
-  #     # MICRO_REGISTRY: "consul"
-  #     MICRO_REGISTRY_ADDRESS: "172.16.60.48:8500"
-  #     MICRO_API_HANDLER: "http"
-  #     MICRO_API_NAMESPACE: "go.micro.web" 
-
-  # micro_web:
-  #   image: microhq/micro
-  #   command: web
-  #   depends_on:
-  #     - consul
-  #   ports:
-  #     - 8082:8082
-  #   environment:
-  #     MICRO_ADDRESS: ":8082"
-  #     MICRO_REGISTRY: "consul"
-  #     MICRO_REGISTRY_ADDRESS: "172.16.60.48:8500"
 
 # networks:
 #   default:
