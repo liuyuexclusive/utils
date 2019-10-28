@@ -169,7 +169,7 @@ func Startup(name string, starter Starter, opts ...Option) error {
 	var swaggerPath, swaggerURL string
 	if options.Address != "" {
 		swaggerPath = "/swagger/*any"
-		swaggerURL = fmt.Sprintf("http://%s:%s/swagger/doc.json", config.HostIP, options.Address)
+		swaggerURL = fmt.Sprintf("http://%s%s/swagger/doc.json", config.HostIP, options.Address)
 	} else {
 		head := strings.TrimPrefix(name, "go.micro.web.")
 		swaggerPath = fmt.Sprintf("/%s/swagger/*any", head)
