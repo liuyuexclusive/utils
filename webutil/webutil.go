@@ -38,7 +38,7 @@ func AllowOrigin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, AccessToken,X-CSRF-Token, Authorization, Token")
-		c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+		c.Header("Access-Control-Allow-Methods", "POST,PUT,DELETE,GET,OPTIONS")
 		c.Header("Access-Control-Max-Age", "86400") // 缓存请求信息 单位为秒
 		// c.Header("Access-Control-Allow-Credentials", "false")
 		if c.Request.Method == "OPTIONS" {
