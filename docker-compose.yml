@@ -9,7 +9,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 123456
     volumes:
-      - /root/future/docker_volumes/mysql:/var/lib/mysql
+      - /Users/liuyu/docker_volumes/mysql:/var/lib/mysql
 
   etcd:
     image: 'bitnami/etcd:latest'
@@ -36,7 +36,7 @@ services:
     environment:
       MICRO_ADDRESS: ":8080"
       MICRO_REGISTRY: "etcd"
-      MICRO_REGISTRY_ADDRESS: "172.21.0.2:2379"
+      MICRO_REGISTRY_ADDRESS: "172.16.60.48:2379"
       MICRO_API_HANDLER: "http"
       MICRO_API_NAMESPACE: "go.micro.web" 
 
@@ -50,7 +50,7 @@ services:
     environment:
       MICRO_ADDRESS: ":8082"
       MICRO_REGISTRY: "etcd"
-      MICRO_REGISTRY_ADDRESS: "172.21.0.2:2379"
+      MICRO_REGISTRY_ADDRESS: "172.16.60.48:2379"
 
   elastic:
     image: elasticsearch:7.4.0
@@ -60,14 +60,14 @@ services:
       discovery.type: "single-node"
       ES_JAVA_OPTS: " -Xms256m -Xmx256m"
     volumes:
-      - /root/future/docker_volumes/elastic:/usr/share/elasticsearch/data
+      - /Users/liuyu/docker_volumes/elastic:/usr/share/elasticsearch/data
 
   kibana:
     image: kibana:7.4.0
     ports:
       - 5601:5601
     volumes:
-      - /root/future/docker_volumes/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - /Users/liuyu/docker_volumes/kibana.yml:/usr/share/kibana/config/kibana.yml
     # docker cp /Users/liuyu/kibana.yml crawler_kibana_1:/usr/share/kibana/config/kibana.yml
 
   # gogs:
@@ -78,7 +78,7 @@ services:
   #     - 3000:3000
   #     - 22:22
   #   volumes:
-  #     - /root/future/docker_volumes/gogs:/data
+  #     - /Users/liuyu/docker_volumes/gogs:/data
 
   # drone:
   #   image: drone/drone:1
@@ -89,28 +89,28 @@ services:
   #     # - 443:443
   #   environment:
   #     DRONE_GIT_ALWAYS_AUTH: "false"
-  #     DRONE_GOGS_SERVER: "http://172.21.0.2:3000"
+  #     DRONE_GOGS_SERVER: "http://172.16.60.48:3000"
   #     DRONE_RUNNER_CAPACITY: "2"
-  #     DRONE_SERVER_HOST: "172.21.0.2:80"
+  #     DRONE_SERVER_HOST: "172.16.60.48:80"
   #     DRONE_SERVER_PROTO: "http"
   #     DRONE_TLS_AUTOCERT: "false"
   #   volumes:
   #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - /root/future/docker_volumes/drone:/data
+  #     - /Users/liuyu/docker_volumes/drone:/data
 
   # redis:
   #   image: redis
   #   ports:
   #     - 6379:6379
   #   volumes:
-  #     - /root/future/docker_volumes/redis:/data
+  #     - /Users/liuyu/docker_volumes/redis:/data
 
   # consul: 
   #   image: consul
   #   ports:
   #     - 8500:8500
   #   volumes:
-  #     - /root/future/docker_volumes/consul:/consul/data
+  #     - /Users/liuyu/docker_volumes/consul:/consul/data
 
 # networks:
 #   default:
