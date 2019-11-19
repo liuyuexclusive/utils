@@ -1,7 +1,7 @@
 package dbutil
 
 import (
-	"github.com/liuyuexclusive/utils/configutil"
+	"github.com/liuyuexclusive/utils/appconfigutil"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql" //使用mysql数据库
@@ -16,7 +16,7 @@ func Open(f func(*gorm.DB) error) error {
 		}
 	}()
 
-	config := configutil.MustGet()
+	config := appconfigutil.MustGet()
 
 	db, err := gorm.Open("mysql", config.ConnStr)
 

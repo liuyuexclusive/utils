@@ -3,7 +3,7 @@ package srvutil
 import (
 	"time"
 
-	"github.com/liuyuexclusive/utils/configutil"
+	"github.com/liuyuexclusive/utils/appconfigutil"
 	"github.com/liuyuexclusive/utils/logutil"
 
 	"github.com/micro/go-micro"
@@ -42,10 +42,10 @@ func Startup(name string, starter Starter, opts ...Option) {
 	service := micro.NewService(
 		micro.Name(name),
 		micro.Version("latest"),
-		micro.Registry(etcd.NewRegistry(registry.Addrs(configutil.MustGet().ETCDAddress))),
+		micro.Registry(etcd.NewRegistry(registry.Addrs(appconfigutil.MustGet().ETCDAddress))),
 		micro.RegisterTTL(time.Second*30),
 		micro.RegisterInterval(time.Second*15),
-		micro.Broker(nats.NewBroker(broker.Addrs(configutil.MustGet().NatsAddress))),
+		micro.Broker(nats.NewBroker(broker.Addrs(appconfigutil.MustGet().NatsAddress))),
 	)
 
 	// Initialise service

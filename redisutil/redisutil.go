@@ -1,7 +1,7 @@
 package redisutil
 
 import (
-	"github.com/liuyuexclusive/utils/configutil"
+	"github.com/liuyuexclusive/utils/appconfigutil"
 	"github.com/sirupsen/logrus"
 
 	"github.com/go-redis/redis"
@@ -10,7 +10,7 @@ import (
 // Open 打开redis
 func Open(f func(client *redis.Client) error) error {
 	client := redis.NewClient(&redis.Options{
-		Addr:     configutil.MustGet().RedisAddress,
+		Addr:     appconfigutil.MustGet().RedisAddress,
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})

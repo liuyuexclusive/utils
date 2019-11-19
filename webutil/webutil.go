@@ -12,7 +12,7 @@ import (
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/etcd"
 
-	"github.com/liuyuexclusive/utils/configutil"
+	"github.com/liuyuexclusive/utils/appconfigutil"
 	"github.com/liuyuexclusive/utils/logutil"
 
 	"github.com/gin-gonic/gin"
@@ -135,7 +135,7 @@ func Startup(name string, starter Starter, opts ...Option) error {
 		return errors.New("请输入服务名称")
 	}
 
-	config := configutil.MustGet()
+	config := appconfigutil.MustGet()
 	client.DefaultClient.Init(client.Broker(nats.NewBroker(broker.Addrs(config.NatsAddress))))
 
 	webOptions := []web.Option{
