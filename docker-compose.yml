@@ -1,15 +1,15 @@
 version: "3"
 services:
-  mysql:
-    image: mysql:latest
-    ports: 
-      - 3306:3306
-      - 33060:33060
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-    volumes:
-      - /Users/liuyu/docker_volumes/mysql:/var/lib/mysql
+  # mysql:
+  #   image: mysql:latest
+  #   ports: 
+  #     - 3306:3306
+  #     - 33060:33060
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=123456
+  #   volumes:
+  #     - /Users/liuyu/docker_volumes/mysql:/var/lib/mysql
 
   etcd:
     image: 'bitnami/etcd:latest'
@@ -26,7 +26,7 @@ services:
       - 4222:4222
       - 8222:8222     
 
-  micro_api:
+  micro-api:
     image: microhq/micro
     command: api
     depends_on:
@@ -34,13 +34,13 @@ services:
     ports:
       - 9000:8080
     environment:
-      MICRO_ADDRESS: ":8080"
-      MICRO_REGISTRY: "etcd"
-      MICRO_REGISTRY_ADDRESS: "172.16.60.48:2379"
-      MICRO_API_HANDLER: "http"
-      MICRO_API_NAMESPACE: "go.micro.web" 
+      - MICRO_ADDRESS=:8080
+      - MICRO_REGISTRY=etcd
+      - MICRO_REGISTRY_ADDRESS=etcd:2379
+      - MICRO_API_HANDLER=http
+      - MICRO_API_NAMESPACE=go.micro.web
 
-  micro_web:
+  micro-web:
     image: microhq/micro
     command: web
     depends_on:
@@ -48,11 +48,11 @@ services:
     ports:
       - 8082:8082
     environment:
-      MICRO_ADDRESS: ":8082"
-      MICRO_REGISTRY: "etcd"
-      MICRO_REGISTRY_ADDRESS: "172.16.60.48:2379"
+      - MICRO_ADDRESS=:8082
+      - MICRO_REGISTRY=etcd
+      - MICRO_REGISTRY_ADDRESS=etcd:2379
 
-  elastic:
+  elasticsearch:
     image: elasticsearch:7.4.0
     ports: 
       - 9200:9200
@@ -60,15 +60,54 @@ services:
       discovery.type: "single-node"
       ES_JAVA_OPTS: " -Xms256m -Xmx256m"
     volumes:
-      - /Users/liuyu/docker_volumes/elastic:/usr/share/elasticsearch/data
+      - /Users/liuyu/docker_volumes/elasticsearch:/usr/share/elasticsearch/data
+  
+  jaeger-collector:
+    image: jaegertracing/jaeger-collector
+    restart: always
+    environment:
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - ES_SERVER_URLS=http://elasticsearch:9200
+      - ES_USERNAME=elastic
+      - LOG_LEVEL=debug
+    ports: 
+      - 14267:14267
+    depends_on:
+      - elasticsearch
 
-  kibana:
-    image: kibana:7.4.0
+  jaeger-agent:
+    image: jaegertracing/jaeger-agent
+    restart: always
+    environment:
+      - COLLECTOR_HOST_PORT=jaeger-collector:14267
+      - LOG_LEVEL=debug
     ports:
-      - 5601:5601
-    volumes:
-      - /Users/liuyu/docker_volumes/kibana.yml:/usr/share/kibana/config/kibana.yml
-    # docker cp /Users/liuyu/kibana.yml crawler_kibana_1:/usr/share/kibana/config/kibana.yml
+      - "5775:5775/udp"
+      - "5778:5778"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+    depends_on:
+      - jaeger-collector
+  jaeger-query:
+    image: jaegertracing/jaeger-query
+    restart: always
+    environment:
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - ES_SERVER_URLS=http://elasticsearch:9200
+      - ES_USERNAME=elastic
+      - LOG_LEVEL=debug
+    ports:
+      - 16686:16686
+    depends_on:
+      - elasticsearch
+
+  # kibana:
+  #   image: kibana:7.4.0
+  #   ports:
+  #     - 5601:5601
+  #   volumes:
+  #     - /Users/liuyu/docker_volumes/kibana.yml:/usr/share/kibana/config/kibana.yml
+  #   # docker cp /Users/liuyu/kibana.yml crawler_kibana_1:/usr/share/kibana/config/kibana.yml
 
   # gogs:
   #   image: gogs/gogs
@@ -89,9 +128,9 @@ services:
   #     # - 443:443
   #   environment:
   #     DRONE_GIT_ALWAYS_AUTH: "false"
-  #     DRONE_GOGS_SERVER: "http://172.16.60.48:3000"
+  #     DRONE_GOGS_SERVER=http://gogs:3000
   #     DRONE_RUNNER_CAPACITY: "2"
-  #     DRONE_SERVER_HOST: "172.16.60.48:80"
+  #     DRONE_SERVER_HOST: gogs:80
   #     DRONE_SERVER_PROTO: "http"
   #     DRONE_TLS_AUTOCERT: "false"
   #   volumes:

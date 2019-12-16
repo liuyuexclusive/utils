@@ -9,14 +9,15 @@ import (
 )
 
 type Config struct {
-	Name         string `yaml:"Name"`
-	ETCDAddress  string `yaml:"ETCDAddress"`
-	NatsAddress  string `yaml:"NatsAddress"`
-	HostIP       string `yaml:"HostIP"`
-	APIPort      string `yaml:"APIPort"`
-	ElasticURL   string `yaml:"ElasticURL"`
-	ConnStr      string `yaml:"ConnStr"`
-	RedisAddress string `yaml:"RedisAddress"`
+	Name          string `yaml:"Name"`
+	ETCDAddress   string `yaml:"ETCDAddress"`
+	NatsAddress   string `yaml:"NatsAddress"`
+	HostIP        string `yaml:"HostIP"`
+	APIPort       string `yaml:"APIPort"`
+	ElasticURL    string `yaml:"ElasticURL"`
+	ConnStr       string `yaml:"ConnStr"`
+	RedisAddress  string `yaml:"RedisAddress"`
+	JaegerAddress string `yaml:"JaegerAddress"`
 }
 
 func MustGet() *Config {

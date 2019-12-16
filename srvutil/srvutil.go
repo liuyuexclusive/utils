@@ -1,6 +1,7 @@
 package srvutil
 
 import (
+	"github.com/liuyuexclusive/utils/tracerutil"
 	"time"
 
 	"github.com/liuyuexclusive/utils/appconfigutil"
@@ -11,12 +12,15 @@ import (
 	"github.com/micro/go-micro/broker/nats"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/etcd"
+	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
 	"github.com/sirupsen/logrus"
 )
 
 type Options struct {
 	// 是否记录日志到ES 默认为false
 	IsLogToES bool
+	// 是否使用opentrace(jaeger)
+	IsTrace bool
 }
 
 type Option func(ops *Options)
@@ -28,6 +32,7 @@ type Starter interface {
 func Startup(name string, starter Starter, opts ...Option) {
 	options := &Options{
 		IsLogToES: false,
+		IsTrace:   false,
 	}
 
 	for _, opt := range opts {
@@ -38,15 +43,28 @@ func Startup(name string, starter Starter, opts ...Option) {
 		logutil.LogToES(name)
 	}
 
-	// New Service
-	service := micro.NewService(
+	microOpts := []micro.Option{
 		micro.Name(name),
 		micro.Version("latest"),
 		micro.Registry(etcd.NewRegistry(registry.Addrs(appconfigutil.MustGet().ETCDAddress))),
-		micro.RegisterTTL(time.Second*30),
-		micro.RegisterInterval(time.Second*15),
+		micro.RegisterTTL(time.Second * 30),
+		micro.RegisterInterval(time.Second * 15),
 		micro.Broker(nats.NewBroker(broker.Addrs(appconfigutil.MustGet().NatsAddress))),
-	)
+	}
+
+	if options.IsTrace {
+		t, closer, err := tracerutil.NewTracer(name, appconfigutil.MustGet().JaegerAddress)
+
+		if err != nil {
+			logrus.Fatal(err)
+			return
+		}
+		defer closer.Close()
+		microOpts = append(microOpts, micro.WrapHandler(ocplugin.NewHandlerWrapper(t)))
+	}
+
+	// New Service
+	service := micro.NewService(microOpts...)
 
 	// Initialise service
 	service.Init()
