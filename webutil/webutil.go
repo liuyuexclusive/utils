@@ -14,6 +14,8 @@ import (
 
 	"github.com/liuyuexclusive/utils/appconfigutil"
 	"github.com/liuyuexclusive/utils/logutil"
+	"github.com/liuyuexclusive/utils/tracer/gintracerutil"
+	"github.com/liuyuexclusive/utils/tracer/srvtracerutil"
 
 	"github.com/gin-gonic/gin"
 	"github.com/juju/ratelimit"
@@ -105,6 +107,8 @@ type Starter interface {
 type Options struct {
 	//是否记录日志到ES 默认为false
 	IsLogToES bool
+	// 是否使用opentrace(jaeger)
+	IsTrace bool
 	//是否允许跨域 默认为true
 	IsAllowOrigin bool
 	//是否限流 默认为true
@@ -118,6 +122,7 @@ type Option func(ops *Options)
 func Startup(name string, starter Starter, opts ...Option) error {
 	options := &Options{
 		IsLogToES:     false,
+		IsTrace:       false,
 		IsAllowOrigin: true,
 		IsRateLimite:  true,
 		Port:          "",
@@ -145,7 +150,6 @@ func Startup(name string, starter Starter, opts ...Option) error {
 		web.RegisterTTL(time.Second * 30),
 		web.RegisterInterval(time.Second * 15),
 	}
-
 	if options.Port != "" {
 		webOptions = append(webOptions, web.Address(options.Port))
 	}
@@ -170,6 +174,18 @@ func Startup(name string, starter Starter, opts ...Option) error {
 		router.Use(
 			RateLimite(),
 		)
+	}
+
+	if options.IsTrace {
+		_, closer, err := srvtracerutil.NewTracer(name, appconfigutil.MustGet().JaegerAddress)
+
+		if err != nil {
+			logrus.Fatal(err)
+			return nil
+		}
+		defer closer.Close()
+
+		router.Use(gintracerutil.TracerWrapper)
 	}
 
 	var swaggerPath, swaggerURL string

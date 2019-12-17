@@ -1,11 +1,11 @@
 package srvutil
 
 import (
-	"github.com/liuyuexclusive/utils/tracerutil"
 	"time"
 
 	"github.com/liuyuexclusive/utils/appconfigutil"
 	"github.com/liuyuexclusive/utils/logutil"
+	"github.com/liuyuexclusive/utils/tracer/srvtracerutil"
 
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/broker"
@@ -53,7 +53,7 @@ func Startup(name string, starter Starter, opts ...Option) {
 	}
 
 	if options.IsTrace {
-		t, closer, err := tracerutil.NewTracer(name, appconfigutil.MustGet().JaegerAddress)
+		t, closer, err := srvtracerutil.NewTracer(name, appconfigutil.MustGet().JaegerAddress)
 
 		if err != nil {
 			logrus.Fatal(err)
