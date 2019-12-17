@@ -1,6 +1,7 @@
 package webutil
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -210,4 +211,8 @@ func Startup(name string, starter Starter, opts ...Option) error {
 	}
 
 	return nil
+}
+
+func ContextWithSpan(c *gin.Context) context.Context {
+	return gintracerutil.ContextWithSpan(c)
 }

@@ -61,14 +61,14 @@ func TracerWrapper(c *gin.Context) {
 }
 
 // ContextWithSpan 返回context
-func ContextWithSpan(c *gin.Context) (ctx context.Context, ok bool) {
+func ContextWithSpan(c *gin.Context) (ctx context.Context) {
 	v, exist := c.Get(contextTracerKey)
-	if exist == false {
-		ok = false
-		ctx = context.TODO()
-		return
+	if exist {
+		if r, ok := v.(context.Context); ok {
+			ctx = r
+			return
+		}
 	}
-
-	ctx, ok = v.(context.Context)
+	ctx = context.Background()
 	return
 }
