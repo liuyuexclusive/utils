@@ -5,14 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/liuyuexclusive/utils/traceutil"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
 	"strings"
 	"time"
 
-	"github.com/go-log/log"
+	"github.com/liuyuexclusive/utils/traceutil"
+
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/etcd"
 
@@ -33,7 +33,16 @@ import (
 	"github.com/micro/go-micro/metadata"
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
+	p "github.com/prometheus/client_golang/prometheus/promhttp"
 )
+
+func Prometheus() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if c.Request.URL.Path == "/basic/metrics" {
+			p.Handler().ServeHTTP(c.Writer, c.Request)
+		}
+	}
+}
 
 // UseSwagger UseSwagger
 func UseSwagger(path string, url string, router *gin.Engine) {
@@ -111,10 +120,12 @@ type Starter interface {
 }
 
 type Options struct {
-	//是否记录日志到ES 默认为false
+	// 是否记录日志到ES 默认为false
 	IsLogToES bool
 	// 是否使用opentrace(jaeger)
 	IsTrace bool
+	// 是够监控
+	IsPrometheus bool
 	//是否允许跨域 默认为true
 	IsAllowOrigin bool
 	//是否限流 默认为true
@@ -129,6 +140,7 @@ func Startup(name string, starter Starter, opts ...Option) error {
 	options := &Options{
 		IsLogToES:     false,
 		IsTrace:       false,
+		IsPrometheus:  false,
 		IsAllowOrigin: true,
 		IsRateLimite:  true,
 		Port:          "",
@@ -180,6 +192,10 @@ func Startup(name string, starter Starter, opts ...Option) error {
 		router.Use(
 			RateLimite(),
 		)
+	}
+
+	if options.IsPrometheus {
+		router.Use(Prometheus())
 	}
 
 	if options.IsTrace {
@@ -243,7 +259,7 @@ func TracerWrapper(c *gin.Context) {
 	if err := opentracing.GlobalTracer().Inject(sp.Context(),
 		opentracing.TextMap,
 		opentracing.TextMapCarrier(md)); err != nil {
-		log.Log(err)
+		logrus.Info(err)
 	}
 
 	ctx := context.TODO()

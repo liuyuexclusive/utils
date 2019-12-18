@@ -21,7 +21,7 @@ func Open(f func(*gorm.DB) error) error {
 	db, err := gorm.Open("mysql", config.ConnStr)
 
 	defer db.Close()
-	db.LogMode(true)
+	db.LogMode(false)
 	db.SingularTable(true)
 	err = f(db)
 	if err != nil {
