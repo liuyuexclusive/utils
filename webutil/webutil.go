@@ -38,7 +38,7 @@ import (
 
 func Prometheus() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if c.Request.URL.Path == "/basic/metrics" {
+		if c.Request.URL.Path == "/metrics" {
 			p.Handler().ServeHTTP(c.Writer, c.Request)
 		}
 	}
