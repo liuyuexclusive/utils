@@ -1,4 +1,4 @@
-package srvtracerutil
+package traceutil
 
 import (
 	"io"

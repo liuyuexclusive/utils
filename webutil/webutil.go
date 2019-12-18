@@ -5,18 +5,19 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/liuyuexclusive/utils/traceutil"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"strings"
 	"time"
 
+	"github.com/go-log/log"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/etcd"
 
 	"github.com/liuyuexclusive/utils/appconfigutil"
 	"github.com/liuyuexclusive/utils/logutil"
-	"github.com/liuyuexclusive/utils/tracer/gintracerutil"
-	"github.com/liuyuexclusive/utils/tracer/srvtracerutil"
 
 	"github.com/gin-gonic/gin"
 	"github.com/juju/ratelimit"
@@ -28,6 +29,10 @@ import (
 
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+
+	"github.com/micro/go-micro/metadata"
+	opentracing "github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/ext"
 )
 
 // UseSwagger UseSwagger
@@ -178,7 +183,7 @@ func Startup(name string, starter Starter, opts ...Option) error {
 	}
 
 	if options.IsTrace {
-		_, closer, err := srvtracerutil.NewTracer(name, appconfigutil.MustGet().JaegerAddress)
+		_, closer, err := traceutil.NewTracer(name, appconfigutil.MustGet().JaegerAddress)
 
 		if err != nil {
 			logrus.Fatal(err)
@@ -186,7 +191,7 @@ func Startup(name string, starter Starter, opts ...Option) error {
 		}
 		defer closer.Close()
 
-		router.Use(gintracerutil.TracerWrapper)
+		router.Use(TracerWrapper)
 	}
 
 	var swaggerPath, swaggerURL string
@@ -213,6 +218,62 @@ func Startup(name string, starter Starter, opts ...Option) error {
 	return nil
 }
 
-func ContextWithSpan(c *gin.Context) context.Context {
-	return gintracerutil.ContextWithSpan(c)
+const contextTracerKey = "Tracer-context"
+
+// sf sampling frequency
+var sf = 100
+
+func init() {
+	rand.Seed(time.Now().Unix())
+}
+
+// SetSamplingFrequency 设置采样频率
+// 0 <= n <= 100
+func SetSamplingFrequency(n int) {
+	sf = n
+}
+
+// TracerWrapper tracer 中间件
+func TracerWrapper(c *gin.Context) {
+	md := make(map[string]string)
+	spanCtx, _ := opentracing.GlobalTracer().Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(c.Request.Header))
+	sp := opentracing.GlobalTracer().StartSpan(c.Request.URL.Path, opentracing.ChildOf(spanCtx))
+	defer sp.Finish()
+
+	if err := opentracing.GlobalTracer().Inject(sp.Context(),
+		opentracing.TextMap,
+		opentracing.TextMapCarrier(md)); err != nil {
+		log.Log(err)
+	}
+
+	ctx := context.TODO()
+	ctx = opentracing.ContextWithSpan(ctx, sp)
+	ctx = metadata.NewContext(ctx, md)
+	c.Set(contextTracerKey, ctx)
+
+	c.Next()
+
+	statusCode := c.Writer.Status()
+	ext.HTTPStatusCode.Set(sp, uint16(statusCode))
+	ext.HTTPMethod.Set(sp, c.Request.Method)
+	ext.HTTPUrl.Set(sp, c.Request.URL.EscapedPath())
+	if statusCode >= http.StatusInternalServerError {
+		ext.Error.Set(sp, true)
+	} else if rand.Intn(100) > sf {
+		ext.SamplingPriority.Set(sp, 0)
+	}
+
+}
+
+// ContextWithSpan 返回context
+func ContextWithSpan(c *gin.Context) (ctx context.Context) {
+	v, exist := c.Get(contextTracerKey)
+	if exist {
+		if r, ok := v.(context.Context); ok {
+			ctx = r
+			return
+		}
+	}
+	ctx = context.Background()
+	return
 }
