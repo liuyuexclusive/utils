@@ -15,6 +15,7 @@ require (
 	github.com/micro/go-plugins v1.5.1
 	github.com/olivere/elastic/v7 v7.0.7
 	github.com/opentracing/opentracing-go v1.1.0
+	github.com/prometheus/client_golang v1.2.1
 	github.com/sirupsen/logrus v1.4.2
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/uber/jaeger-client-go v2.20.1+incompatible

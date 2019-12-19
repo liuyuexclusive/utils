@@ -12,7 +12,6 @@ import (
 	"github.com/micro/go-micro/broker/nats"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/etcd"
-	"github.com/micro/go-plugins/wrapper/monitoring/prometheus"
 	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
 	"github.com/sirupsen/logrus"
 )
@@ -51,7 +50,7 @@ func Startup(name string, starter Starter, opts ...Option) {
 		micro.RegisterTTL(time.Second * 30),
 		micro.RegisterInterval(time.Second * 15),
 		micro.Broker(nats.NewBroker(broker.Addrs(appconfigutil.MustGet().NatsAddress))),
-		micro.WrapHandler(prometheus.NewHandlerWrapper()),
+		// micro.WrapHandler(prometheus.NewHandlerWrapper()),
 	}
 
 	if options.IsTrace {

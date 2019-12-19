@@ -33,16 +33,15 @@ import (
 	"github.com/micro/go-micro/metadata"
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
-	p "github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func Prometheus() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		if c.Request.URL.Path == "/metrics" {
-			p.Handler().ServeHTTP(c.Writer, c.Request)
-		}
-	}
-}
+// func Prometheus() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		if c.Request.URL.Path == "/metrics" {
+// 			p.Handler().ServeHTTP(c.Writer, c.Request)
+// 		}
+// 	}
+// }
 
 // UseSwagger UseSwagger
 func UseSwagger(path string, url string, router *gin.Engine) {
@@ -124,8 +123,6 @@ type Options struct {
 	IsLogToES bool
 	// 是否使用opentrace(jaeger)
 	IsTrace bool
-	// 是够监控
-	IsPrometheus bool
 	//是否允许跨域 默认为true
 	IsAllowOrigin bool
 	//是否限流 默认为true
@@ -140,7 +137,6 @@ func Startup(name string, starter Starter, opts ...Option) error {
 	options := &Options{
 		IsLogToES:     false,
 		IsTrace:       false,
-		IsPrometheus:  false,
 		IsAllowOrigin: true,
 		IsRateLimite:  true,
 		Port:          "",
@@ -192,10 +188,6 @@ func Startup(name string, starter Starter, opts ...Option) error {
 		router.Use(
 			RateLimite(),
 		)
-	}
-
-	if options.IsPrometheus {
-		router.Use(Prometheus())
 	}
 
 	if options.IsTrace {
