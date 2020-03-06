@@ -1,24 +1,24 @@
 version: "3"
 services:
-  # mysql:
-  #   image: mysql:latest
-  #   ports: 
-  #     - 3306:3306
-  #     - 33060:33060
-  #   command: --default-authentication-plugin=mysql_native_password
-  #   environment:
-  #     - MYSQL_ROOT_PASSWORD=123456
-  #   volumes:
-  #     - /Users/liuyu/docker_volumes/mysql:/var/lib/mysql
-
-  etcd:
-    image: 'bitnami/etcd:latest'
+  mysql:
+    image: mysql:latest
+    ports: 
+      - 3306:3306
+      - 33060:33060
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-      - ALLOW_NONE_AUTHENTICATION=yes
-      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
-    ports:
-      - 2379:2379
-      - 2380:2380
+      - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - /Users/liuyu/docker_volumes/mysql:/var/lib/mysql
+
+  # etcd:
+  #   image: 'bitnami/etcd:latest'
+  #   environment:
+  #     - ALLOW_NONE_AUTHENTICATION=yes
+  #     - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+  #   ports:
+  #     - 2379:2379
+  #     - 2380:2380
       
   nats: 
     image: nats
@@ -26,80 +26,81 @@ services:
       - 4222:4222
       - 8222:8222     
 
-  micro-api:
-    image: microhq/micro
-    command: api
-    depends_on:
-      - etcd
-    ports:
-      - 9000:8080
-    environment:
-      - MICRO_ADDRESS=:8080
-      - MICRO_REGISTRY=etcd
-      - MICRO_REGISTRY_ADDRESS=etcd:2379
-      - MICRO_API_HANDLER=http
-      - MICRO_API_NAMESPACE=go.micro.web
+  # micro-api:
+  #   image: microhq/micro
+  #   command: api
+  #   depends_on:
+  #     - etcd
+  #   ports:
+  #     - 9000:8080
+  #   environment:
+  #     - MICRO_ADDRESS=:8080
+  #     - MICRO_REGISTRY=etcd
+  #     - MICRO_REGISTRY_ADDRESS=etcd:2379
+  #     - MICRO_API_HANDLER=http
+  #     - MICRO_API_NAMESPACE=go.micro.web
 
-  micro-web:
-    image: microhq/micro
-    command: web
-    depends_on:
-      - etcd
-    ports:
-      - 8082:8082
-    environment:
-      - MICRO_ADDRESS=:8082
-      - MICRO_REGISTRY=etcd
-      - MICRO_REGISTRY_ADDRESS=etcd:2379
+  # micro-web:
+  #   image: microhq/micro
+  #   command: web
+  #   depends_on:
+  #     - etcd
+  #   ports:
+  #     - 8082:8082
+  #   environment:
+  #     - MICRO_ADDRESS=:8082
+  #     - MICRO_REGISTRY=etcd
+  #     - MICRO_REGISTRY_ADDRESS=etcd:2379
 
-  elasticsearch:
-    image: elasticsearch:7.4.0
-    ports: 
-      - 9200:9200
-    environment:
-      discovery.type: "single-node"
-      ES_JAVA_OPTS: " -Xms256m -Xmx256m"
-    volumes:
-      - /Users/liuyu/docker_volumes/elasticsearch:/usr/share/elasticsearch/data
+  # elasticsearch:
+  #   image: elasticsearch:7.4.0
+  #   ports: 
+  #     - 9200:9200
+  #   environment:
+  #     discovery.type: "single-node"
+  #     ES_JAVA_OPTS: " -Xms256m -Xmx256m"
+  #   volumes:
+  #     - /Users/liuyu/docker_volumes/elasticsearch:/usr/share/elasticsearch/data
   
-  jaeger-collector:
-    image: jaegertracing/jaeger-collector
-    restart: always
-    environment:
-      - SPAN_STORAGE_TYPE=elasticsearch
-      - ES_SERVER_URLS=http://elasticsearch:9200
-      - ES_USERNAME=elastic
-      - LOG_LEVEL=debug
-    ports: 
-      - 14267:14267
-    depends_on:
-      - elasticsearch
+  # jaeger-collector:
+  #   image: jaegertracing/jaeger-collector
+  #   restart: always
+  #   environment:
+  #     - SPAN_STORAGE_TYPE=elasticsearch
+  #     - ES_SERVER_URLS=http://elasticsearch:9200
+  #     - ES_USERNAME=elastic
+  #     - LOG_LEVEL=debug
+  #   ports: 
+  #     - 14267:14267
+  #   depends_on:
+  #     - elasticsearch
 
-  jaeger-agent:
-    image: jaegertracing/jaeger-agent
-    restart: always
-    environment:
-      - COLLECTOR_HOST_PORT=jaeger-collector:14267
-      - LOG_LEVEL=debug
-    ports:
-      - "5775:5775/udp"
-      - "5778:5778"
-      - "6831:6831/udp"
-      - "6832:6832/udp"
-    depends_on:
-      - jaeger-collector
-  jaeger-query:
-    image: jaegertracing/jaeger-query
-    restart: always
-    environment:
-      - SPAN_STORAGE_TYPE=elasticsearch
-      - ES_SERVER_URLS=http://elasticsearch:9200
-      - ES_USERNAME=elastic
-      - LOG_LEVEL=debug
-    ports:
-      - 16686:16686
-    depends_on:
-      - elasticsearch
+  # jaeger-agent:
+  #   image: jaegertracing/jaeger-agent
+  #   restart: always
+  #   environment:
+  #     - COLLECTOR_HOST_PORT=jaeger-collector:14267
+  #     - LOG_LEVEL=debug
+  #   ports:
+  #     - "5775:5775/udp"
+  #     - "5778:5778"
+  #     - "6831:6831/udp"
+  #     - "6832:6832/udp"
+  #   depends_on:
+  #     - jaeger-collector
+
+  # jaeger-query:
+  #   image: jaegertracing/jaeger-query
+  #   restart: always
+  #   environment:
+  #     - SPAN_STORAGE_TYPE=elasticsearch
+  #     - ES_SERVER_URLS=http://elasticsearch:9200
+  #     - ES_USERNAME=elastic
+  #     - LOG_LEVEL=debug
+  #   ports:
+  #     - 16686:16686
+  #   depends_on:
+  #     - elasticsearch
 
   # prometheus:
   #   image: prom/prometheus
@@ -116,33 +117,33 @@ services:
   #     - /Users/liuyu/docker_volumes/kibana.yml:/usr/share/kibana/config/kibana.yml
   #   # docker cp /Users/liuyu/kibana.yml crawler_kibana_1:/usr/share/kibana/config/kibana.yml
 
-  # gogs:
-  #   image: gogs/gogs
-  #   depends_on:
-  #     - mysql
-  #   ports:
-  #     - 3000:3000
-  #     - 22:22
-  #   volumes:
-  #     - /Users/liuyu/docker_volumes/gogs:/data
+  gogs:
+    image: gogs/gogs
+    depends_on:
+      - mysql
+    ports:
+      - "3000:3000"
+      - "22:22"
+    volumes:
+      - /Users/liuyu/docker_volumes/gogs:/data
 
-  # drone:
-  #   image: drone/drone:1
-  #   depends_on:
-  #     - gogs
-  #   ports:
-  #     - 80:80
-  #     # - 443:443
-  #   environment:
-  #     DRONE_GIT_ALWAYS_AUTH: "false"
-  #     DRONE_GOGS_SERVER=http://gogs:3000
-  #     DRONE_RUNNER_CAPACITY: "2"
-  #     DRONE_SERVER_HOST: gogs:80
-  #     DRONE_SERVER_PROTO: "http"
-  #     DRONE_TLS_AUTOCERT: "false"
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - /Users/liuyu/docker_volumes/drone:/data
+  drone:
+    image: drone/drone:1
+    depends_on:
+      - gogs
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DRONE_GIT_ALWAYS_AUTH=false
+      - DRONE_GOGS_SERVER=http://gogs:3000
+      - DRONE_RUNNER_CAPACITY=2
+      - DRONE_SERVER_HOST=drone
+      - DRONE_SERVER_PROTO=http
+      - DRONE_TLS_AUTOCERT=false
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /Users/liuyu/docker_volumes/drone:/data
 
   # redis:
   #   image: redis
