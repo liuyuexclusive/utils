@@ -11,14 +11,14 @@ services:
     volumes:
       - /Users/liuyu/docker_volumes/mysql:/var/lib/mysql
 
-  # etcd:
-  #   image: 'bitnami/etcd:latest'
-  #   environment:
-  #     - ALLOW_NONE_AUTHENTICATION=yes
-  #     - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
-  #   ports:
-  #     - 2379:2379
-  #     - 2380:2380
+  etcd:
+    image: 'bitnami/etcd:latest'
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    ports:
+      - 2379:2379
+      - 2380:2380
       
   nats: 
     image: nats
@@ -26,31 +26,31 @@ services:
       - 4222:4222
       - 8222:8222     
 
-  # micro-api:
-  #   image: microhq/micro
-  #   command: api
-  #   depends_on:
-  #     - etcd
-  #   ports:
-  #     - 9000:8080
-  #   environment:
-  #     - MICRO_ADDRESS=:8080
-  #     - MICRO_REGISTRY=etcd
-  #     - MICRO_REGISTRY_ADDRESS=etcd:2379
-  #     - MICRO_API_HANDLER=http
-  #     - MICRO_API_NAMESPACE=go.micro.web
+  micro-api:
+    image: microhq/micro
+    command: api
+    depends_on:
+      - etcd
+    ports:
+      - 9000:8080
+    environment:
+      - MICRO_ADDRESS=:8080
+      - MICRO_REGISTRY=etcd
+      - MICRO_REGISTRY_ADDRESS=etcd:2379
+      - MICRO_API_HANDLER=http
+      - MICRO_API_NAMESPACE=go.micro.web
 
-  # micro-web:
-  #   image: microhq/micro
-  #   command: web
-  #   depends_on:
-  #     - etcd
-  #   ports:
-  #     - 8082:8082
-  #   environment:
-  #     - MICRO_ADDRESS=:8082
-  #     - MICRO_REGISTRY=etcd
-  #     - MICRO_REGISTRY_ADDRESS=etcd:2379
+  micro-web:
+    image: microhq/micro
+    command: web
+    depends_on:
+      - etcd
+    ports:
+      - 8082:8082
+    environment:
+      - MICRO_ADDRESS=:8082
+      - MICRO_REGISTRY=etcd
+      - MICRO_REGISTRY_ADDRESS=etcd:2379
 
   # elasticsearch:
   #   image: elasticsearch:7.4.0
@@ -117,33 +117,33 @@ services:
   #     - /Users/liuyu/docker_volumes/kibana.yml:/usr/share/kibana/config/kibana.yml
   #   # docker cp /Users/liuyu/kibana.yml crawler_kibana_1:/usr/share/kibana/config/kibana.yml
 
-  gogs:
-    image: gogs/gogs
-    depends_on:
-      - mysql
-    ports:
-      - "3000:3000"
-      - "22:22"
-    volumes:
-      - /Users/liuyu/docker_volumes/gogs:/data
+  # gogs:
+  #   image: gogs/gogs
+  #   depends_on:
+  #     - mysql
+  #   ports:
+  #     - "3000:3000"
+  #     - "22:22"
+  #   volumes:
+  #     - /Users/liuyu/docker_volumes/gogs:/data
 
-  drone:
-    image: drone/drone:1
-    depends_on:
-      - gogs
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      - DRONE_GIT_ALWAYS_AUTH=false
-      - DRONE_GOGS_SERVER=http://gogs:3000
-      - DRONE_RUNNER_CAPACITY=2
-      - DRONE_SERVER_HOST=drone
-      - DRONE_SERVER_PROTO=http
-      - DRONE_TLS_AUTOCERT=false
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /Users/liuyu/docker_volumes/drone:/data
+  # drone:
+  #   image: drone/drone:1
+  #   depends_on:
+  #     - gogs
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   environment:
+  #     - DRONE_GIT_ALWAYS_AUTH=false
+  #     - DRONE_GOGS_SERVER=http://gogs:3000
+  #     - DRONE_RUNNER_CAPACITY=2
+  #     - DRONE_SERVER_HOST=drone
+  #     - DRONE_SERVER_PROTO=http
+  #     - DRONE_TLS_AUTOCERT=false
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - /Users/liuyu/docker_volumes/drone:/data
 
   # redis:
   #   image: redis
