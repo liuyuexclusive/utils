@@ -28,9 +28,9 @@ docker build . -t registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectNam
 docker push registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
 ssh root@{{.Host}} "
 docker pull registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
-docker stop future.srv.basic_1
-docker rm future.srv.basic_1
-docker run -d --network=future_default --name=future.srv.basic_1 registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
+docker stop future.{{.Type}}.basic_1
+docker rm future.{{.Type}}.basic_1
+docker run -d --network=future_default --name=future.{{.Type}}.basic_1 registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
 "
 `
 
@@ -40,10 +40,10 @@ npm run build
 docker build . -t registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
 docker push registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
 ssh root@{{.Host}} "
-docker stop future.front.admin_1
-docker rm future.front.admin_1
+docker stop future.{{.Type}}.admin_1
+docker rm future.{{.Type}}.admin_1
 docker pull registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
-docker run -d -p 9090:80 -v /root/future/nginx.conf:/etc/nginx/nginx.conf --network=future_default --name=future.front.admin_1 registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
+docker run -d -p 9090:80 -v /root/future/nginx.conf:/etc/nginx/nginx.conf --network=future_default --name=future.{{.Type}}.admin_1 registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
 "
 `
 
