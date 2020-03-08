@@ -19,9 +19,42 @@ type Publish struct {
 	Type        string
 	AppName     string
 	Version     string
+	Host        string
 }
 
+var golangTemplate string = `
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build 
+docker build . -t registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
+docker push registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
+ssh root@{{.Host}} "
+docker pull registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
+docker stop future.srv.basic_1
+docker rm future.srv.basic_1
+docker run -d --network=future_default --name=future.srv.basic_1 registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
+"
+`
+
+var vueTemplate string = `
+npm install
+npm run build
+docker build . -t registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
+docker push registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
+ssh root@{{.Host}} "
+docker stop future.front.admin_1
+docker rm future.front.admin_1
+docker pull registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
+docker run -d -p 9090:80 -v /root/future/nginx.conf:/etc/nginx/nginx.conf --network=future_default --name=future.front.admin_1 registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/{{.ProjectName}}.{{.Type}}.{{.AppName}}:{{.Version}}
+"
+`
+
+var version, host string
+
 func main() {
+
+	publish()
+}
+
+func publish() {
 	now := time.Now()
 
 	flag.Parse()
@@ -46,6 +79,26 @@ func main() {
 	publish.Type = res[0][2]
 	publish.AppName = res[0][3]
 	publish.Version = version
+	publish.Host = host
+
+	_, err = os.Stat("./publish.txt")
+	if err != nil {
+		fileInfo, err := os.Create("publish.txt")
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer fileInfo.Close()
+		var content string
+		switch publish.Type {
+		case "srv", "web":
+			content = golangTemplate
+		case "front":
+			content = vueTemplate
+
+		}
+		fileInfo.WriteString(content)
+	}
 
 	tem, err := template.ParseFiles("publish.txt")
 
@@ -66,8 +119,7 @@ func main() {
 	fmt.Printf("总耗时:%f秒\n", time.Since(now).Seconds())
 }
 
-var version string
-
 func init() {
-	flag.StringVar(&version, "v", "latest", "镜像版本号")
+	flag.StringVar(&version, "v", "latest", "docker image version")
+	flag.StringVar(&host, "h", "49.232.166.55", "host")
 }
