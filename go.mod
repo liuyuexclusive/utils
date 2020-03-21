@@ -19,7 +19,7 @@ require (
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/uber/jaeger-client-go v2.20.1+incompatible
 	github.com/uber/jaeger-lib v2.2.0+incompatible // indirect
-	go.etcd.io/etcd v3.3.17+incompatible
+	go.etcd.io/etcd v3.3.19+incompatible
 	go.uber.org/zap v1.11.0 // indirect
 	golang.org/x/sys v0.0.0-20191026070338-33540a1f6037 // indirect
 	gopkg.in/sohlich/elogrus.v7 v7.0.0
