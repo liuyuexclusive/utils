@@ -12,6 +12,7 @@ import (
 	"github.com/micro/go-micro/broker/nats"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/etcd"
+	"github.com/micro/go-plugins/wrapper/monitoring/prometheus"
 	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
 	"github.com/sirupsen/logrus"
 )
@@ -21,6 +22,8 @@ type Options struct {
 	IsLogToES bool
 	// 是否使用opentrace(jaeger)
 	IsTrace bool
+	// 是否monitor(prometheus)
+	IsMetrics bool
 }
 
 type Option func(ops *Options)
@@ -33,6 +36,7 @@ func Startup(name string, starter Starter, opts ...Option) {
 	options := &Options{
 		IsLogToES: false,
 		IsTrace:   false,
+		IsMetrics: false,
 	}
 
 	for _, opt := range opts {
@@ -50,7 +54,10 @@ func Startup(name string, starter Starter, opts ...Option) {
 		micro.RegisterTTL(time.Second * 30),
 		micro.RegisterInterval(time.Second * 15),
 		micro.Broker(nats.NewBroker(broker.Addrs(appconfigutil.MustGet().NatsAddress))),
-		// micro.WrapHandler(prometheus.NewHandlerWrapper()),
+	}
+
+	if options.IsMetrics {
+		microOpts = append(microOpts, micro.WrapHandler(prometheus.NewHandlerWrapper()))
 	}
 
 	if options.IsTrace {
