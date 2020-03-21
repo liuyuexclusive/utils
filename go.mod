@@ -5,6 +5,7 @@ go 1.13
 require (
 	github.com/ahmetb/go-linq v3.0.0+incompatible
 	github.com/codahale/hdrhistogram v0.0.0-20161010025455-3a0bb77429bd // indirect
+	github.com/coreos/etcd v3.3.19+incompatible // indirect
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/gogo/protobuf v1.3.1 // indirect
