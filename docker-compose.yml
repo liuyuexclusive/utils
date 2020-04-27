@@ -27,7 +27,7 @@ services:
       - 8222:8222     
 
   micro-api:
-    image: microhq/micro
+    image: micro/micro
     command: api
     depends_on:
       - etcd
