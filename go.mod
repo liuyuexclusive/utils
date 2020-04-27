@@ -12,7 +12,7 @@ require (
 	github.com/gorilla/websocket v1.4.1
 	github.com/jinzhu/gorm v1.9.11
 	github.com/juju/ratelimit v1.0.1
-	github.com/micro/go-micro v1.16.0
+	github.com/micro/go-micro/v2 v2.5.0
 	github.com/micro/go-plugins v1.5.1
 	github.com/olivere/elastic/v7 v7.0.7
 	github.com/opentracing/opentracing-go v1.1.0
@@ -21,8 +21,6 @@ require (
 	github.com/uber/jaeger-client-go v2.20.1+incompatible
 	github.com/uber/jaeger-lib v2.2.0+incompatible // indirect
 	go.etcd.io/etcd v3.3.19+incompatible
-	go.uber.org/zap v1.11.0 // indirect
-	golang.org/x/sys v0.0.0-20191026070338-33540a1f6037 // indirect
 	gopkg.in/sohlich/elogrus.v7 v7.0.0
 	gopkg.in/yaml.v2 v2.2.4
 )

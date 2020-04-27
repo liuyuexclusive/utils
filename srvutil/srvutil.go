@@ -7,11 +7,11 @@ import (
 	"github.com/liuyuexclusive/utils/logutil"
 	"github.com/liuyuexclusive/utils/traceutil"
 
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/broker/nats"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/etcd"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/broker"
+	"github.com/micro/go-micro/v2/broker/nats"
+	"github.com/micro/go-micro/v2/registry"
+	"github.com/micro/go-micro/v2/registry/etcd"
 	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
 	"github.com/sirupsen/logrus"
 )
