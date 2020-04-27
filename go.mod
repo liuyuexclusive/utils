@@ -9,11 +9,11 @@ require (
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/gogo/protobuf v1.3.1 // indirect
-	github.com/gorilla/websocket v1.4.1
+	github.com/gorilla/websocket v1.4.2
 	github.com/jinzhu/gorm v1.9.11
 	github.com/juju/ratelimit v1.0.1
 	github.com/micro/go-micro/v2 v2.5.0
-	github.com/micro/go-plugins v1.5.1
+	github.com/micro/go-plugins v2.5.0
 	github.com/olivere/elastic/v7 v7.0.7
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/sirupsen/logrus v1.4.2
