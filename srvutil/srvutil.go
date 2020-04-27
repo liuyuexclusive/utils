@@ -12,7 +12,7 @@ import (
 	"github.com/micro/go-micro/v2/broker/nats"
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/registry/etcd"
-	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing/v2"
 	"github.com/sirupsen/logrus"
 )
 
