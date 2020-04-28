@@ -33,15 +33,17 @@ import (
 	"github.com/micro/go-micro/v2/metadata"
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
+	p "github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-// func Prometheus() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		if c.Request.URL.Path == "/metrics" {
-// 			p.Handler().ServeHTTP(c.Writer, c.Request)
-// 		}
-// 	}
-// }
+func Prometheus() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if c.Request.URL.Path == "/metrics" {
+			p.Handler().ServeHTTP(c.Writer, c.Request)
+		}
+		c.Next()
+	}
+}
 
 // UseSwagger UseSwagger
 func UseSwagger(path string, url string, router *gin.Engine) {
@@ -114,6 +116,8 @@ type Options struct {
 	IsRateLimite bool
 	//端口 默认为空
 	Port string
+	//是否监控
+	IsMonitor bool
 }
 
 type Option func(ops *Options)
@@ -162,6 +166,12 @@ func Startup(name string, starter Starter, opts ...Option) error {
 	}
 
 	router := gin.Default()
+
+	if options.IsMonitor {
+		router.Use(
+			Prometheus(),
+		)
+	}
 
 	if options.IsAllowOrigin {
 		router.Use(
