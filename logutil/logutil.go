@@ -20,10 +20,10 @@ func LogToES(index string) error {
 	}
 	hook, err := elogrus.NewElasticHook(client, appconfigutil.MustGet().ElasticURL, logrus.InfoLevel, index)
 	if err != nil {
-		return fmt.Errorf("写入elistic日志失败: %w", err)
+		return fmt.Errorf("fail of log to elastic : %w", err)
 	}
 	logrus.AddHook(hook)
 	gin.DefaultWriter = logrus.StandardLogger().Writer()
-	logrus.Info("写入elistic日志成功!")
+	logrus.Info("seccessfully of log to elastic")
 	return nil
 }
