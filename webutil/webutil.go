@@ -123,7 +123,7 @@ type Options struct {
 	IsLogToES bool
 	// 是否使用opentrace(jaeger)
 	IsTrace bool
-	//是否允许跨域 默认为true
+	//是否允许跨域 默认为false,因为micro api默认做了跨域处理
 	IsAllowOrigin bool
 	//是否限流 默认为true
 	IsRateLimite bool
@@ -137,7 +137,7 @@ func Startup(name string, starter Starter, opts ...Option) error {
 	options := &Options{
 		IsLogToES:     false,
 		IsTrace:       false,
-		IsAllowOrigin: true,
+		IsAllowOrigin: false,
 		IsRateLimite:  true,
 		Port:          "",
 	}
