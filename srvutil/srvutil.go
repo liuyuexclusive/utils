@@ -61,6 +61,7 @@ func Startup(name string, starter Starter, opts ...Option) {
 		}
 		defer closer.Close()
 		microOpts = append(microOpts, micro.WrapHandler(ocplugin.NewHandlerWrapper(t)))
+		logrus.Infoln("开启链路追踪")
 	}
 
 	// New Service

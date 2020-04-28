@@ -75,21 +75,6 @@ func RateLimite() gin.HandlerFunc {
 	}
 }
 
-// func Validate() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		token := c.GetHeader("Authorization")
-// 		if token == "" {
-// 			token = c.Query("token")
-// 		}
-// 		res, err := user.NewUserService("go.micro.srv.basic", client.DefaultClient).Validate(context.TODO(), &user.ValidateRequest{Token: token})
-// 		if err != nil {
-// 			c.JSON(401, err.Error())
-// 			c.Abort()
-// 		}
-// 		c.Set("username", res.Name)
-// 	}
-// }
-
 func ReadBody(c *gin.Context, data interface{}) bool {
 	bytes, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
@@ -182,12 +167,14 @@ func Startup(name string, starter Starter, opts ...Option) error {
 		router.Use(
 			AllowOrigin(),
 		)
+		logrus.Infoln("开启跨域")
 	}
 
 	if options.IsRateLimite {
 		router.Use(
 			RateLimite(),
 		)
+		logrus.Infoln("开启限流")
 	}
 
 	if options.IsTrace {
@@ -200,6 +187,7 @@ func Startup(name string, starter Starter, opts ...Option) error {
 		defer closer.Close()
 
 		router.Use(TracerWrapper)
+		logrus.Infoln("开启链路追踪")
 	}
 
 	var swaggerPath, swaggerURL string
