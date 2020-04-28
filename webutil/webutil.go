@@ -196,16 +196,6 @@ func Startup(name string, starter Starter, opts ...Option) error {
 	swaggerPath = fmt.Sprintf("/%s/swagger/*any", head)
 	swaggerURL = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", config.HostIP, config.APIPort, head)
 
-	// var swaggerPath, swaggerURL string
-	// if options.Port != "" {
-	// 	swaggerPath = "/swagger/*any"
-	// 	swaggerURL = fmt.Sprintf("http://%s%s/swagger/doc.json", config.HostIP, options.Port)
-	// } else {
-	// 	head := strings.TrimPrefix(name, "go.micro.api.")
-	// 	swaggerPath = fmt.Sprintf("/%s/swagger/*any", head)
-	// 	swaggerURL = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", config.HostIP, config.APIPort, head)
-	// }
-
 	UseSwagger(swaggerPath, swaggerURL, router)
 
 	starter.Start(router)

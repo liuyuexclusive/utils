@@ -14,6 +14,7 @@ require (
 	github.com/jinzhu/gorm v1.9.11
 	github.com/juju/ratelimit v1.0.1
 	github.com/micro/go-micro/v2 v2.5.0
+	github.com/micro/go-plugins/wrapper/monitoring/prometheus/v2 v2.5.0
 	github.com/micro/go-plugins/wrapper/trace/opentracing/v2 v2.5.0
 	github.com/miekg/dns v1.1.29 // indirect
 	github.com/olivere/elastic/v7 v7.0.7

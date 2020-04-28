@@ -12,6 +12,7 @@ import (
 	"github.com/micro/go-micro/v2/broker/nats"
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/registry/etcd"
+	"github.com/micro/go-plugins/wrapper/monitoring/prometheus/v2"
 	ocplugin "github.com/micro/go-plugins/wrapper/trace/opentracing/v2"
 	"github.com/sirupsen/logrus"
 )
@@ -21,6 +22,8 @@ type Options struct {
 	IsLogToES bool
 	// 是否使用opentrace(jaeger)
 	IsTrace bool
+	//是否监控
+	IsMonitor bool
 }
 
 type Option func(ops *Options)
@@ -62,6 +65,10 @@ func Startup(name string, starter Starter, opts ...Option) {
 		defer closer.Close()
 		microOpts = append(microOpts, micro.WrapHandler(ocplugin.NewHandlerWrapper(t)))
 		logrus.Infoln("开启链路追踪")
+	}
+
+	if options.IsMonitor {
+		microOpts = append(microOpts, micro.WrapHandler(prometheus.NewHandlerWrapper()))
 	}
 
 	// New Service
