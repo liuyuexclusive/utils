@@ -36,9 +36,9 @@ import (
 	p "github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func Prometheus() gin.HandlerFunc {
+func Prometheus(name string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if c.Request.URL.Path == "/metrics" {
+		if c.Request.URL.Path == fmt.Sprintf("/%s/metrics", name) {
 			p.Handler().ServeHTTP(c.Writer, c.Request)
 		}
 		c.Next()
@@ -167,12 +167,6 @@ func Startup(name string, starter Starter, opts ...Option) error {
 
 	router := gin.Default()
 
-	if options.IsMonitor {
-		router.Use(
-			Prometheus(),
-		)
-	}
-
 	if options.IsAllowOrigin {
 		router.Use(
 			AllowOrigin(),
@@ -207,6 +201,12 @@ func Startup(name string, starter Starter, opts ...Option) error {
 	swaggerURL = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", config.HostIP, config.APIPort, head)
 
 	UseSwagger(swaggerPath, swaggerURL, router)
+
+	if options.IsMonitor {
+		router.Use(
+			Prometheus(head),
+		)
+	}
 
 	starter.Start(router)
 
