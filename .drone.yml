@@ -22,7 +22,7 @@ pipeline:
     registry: registry.cn-shenzhen.aliyuncs.com
     repo: registry.cn-shenzhen.aliyuncs.com/liuyuexclusive/future.srv.basic
     username: "liuyuexclusive@hotmail.com"
-    password: "a1234567"
+    password: "qwert123"
     tags:
       - latest   
 
