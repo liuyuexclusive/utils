@@ -1,20 +1,21 @@
 kind: pipeline
+type: docker
 name: default
+
 
 platform:
   os: linux
   arch: amd64
-
+  
 pipeline:
-  build:
-    image: golang
-    environment:
-      GO111MODULE: "on"
-      GOPROXY: "https://goproxy.io"
-      CGO_ENABLED: 0
-    commands:
+  test:
+      image: golang
+      commands:
       - go test ./...
-      - go build
+  build:
+      image: golang
+      commands:
+      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build
 
   publish:
     image: plugins/docker
