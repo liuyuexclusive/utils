@@ -155,7 +155,7 @@ spec:
         - name: MICRO_REGISTRY
           value: consul
         - name: MICRO_REGISTRY_ADDRESS
-          value: 172.16.60.48:30011
+          value: 192.168.0.102:30011
         - name: MICRO_API_HANDLER
           value: http
         - name: MICRO_API_NAMESPACE
@@ -201,7 +201,7 @@ spec:
         - name: MICRO_REGISTRY
           value: consul
         - name: MICRO_REGISTRY_ADDRESS
-          value: 172.16.60.48:30011     
+          value: 192.168.0.102:30011     
         ports:
         - containerPort: 8080
 ---

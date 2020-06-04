@@ -1,9 +1,9 @@
 {
-    "ETCDAddress": "172.16.60.48:2379",
-    "NatsAddress": "172.16.60.48:4222",
-    "ElasticURL": "http://172.16.60.48:9200",
-    "HostIP": "172.16.60.48",
+    "ETCDAddress": "192.168.0.102:2379",
+    "NatsAddress": "192.168.0.102:4222",
+    "ElasticURL": "http://192.168.0.102:9200",
+    "HostIP": "192.168.0.102",
     "APIPort": "9000",
-    "ConnStr": "root:123456@tcp(172.16.60.48:3306)/future?charset=utf8&parseTime=True&loc=Local",
-    "RedisAddress": "172.16.60.48:6379"
+    "ConnStr": "root:123456@tcp(192.168.0.102:3306)/future?charset=utf8&parseTime=True&loc=Local",
+    "RedisAddress": "192.168.0.102:6379"
 }

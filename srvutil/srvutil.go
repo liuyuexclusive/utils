@@ -1,6 +1,7 @@
 package srvutil
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/liuyuexclusive/utils/appconfigutil"
@@ -32,7 +33,7 @@ type Starter interface {
 	Start(s micro.Service)
 }
 
-func Startup(name string, starter Starter, opts ...Option) {
+func Startup(name string, starter Starter, opts ...Option) error {
 	options := &Options{
 		IsLogToES: false,
 		IsTrace:   false,
@@ -59,8 +60,7 @@ func Startup(name string, starter Starter, opts ...Option) {
 		t, closer, err := traceutil.NewTracer(name, appconfigutil.MustGet().JaegerAddress)
 
 		if err != nil {
-			logrus.Fatal(err)
-			return
+			return fmt.Errorf("trace error: %w", err)
 		}
 		defer closer.Close()
 		microOpts = append(microOpts, micro.WrapHandler(ocplugin.NewHandlerWrapper(t)))
@@ -82,6 +82,7 @@ func Startup(name string, starter Starter, opts ...Option) {
 
 	// Run service
 	if err := service.Run(); err != nil {
-		logrus.Fatal(err)
+		return fmt.Errorf("micro service run error: %w", err)
 	}
+	return nil
 }
