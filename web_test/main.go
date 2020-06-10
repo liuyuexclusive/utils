@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/liuyuexclusive/utils/webutil"
+	"github.com/liuyuexclusive/utils/web"
 	"github.com/sirupsen/logrus"
 )
 
@@ -13,7 +13,7 @@ func (s *start) Start(engine *gin.Engine) {
 }
 
 func main() {
-	if err := webutil.Startup("go.micro.api.basic", new(start), func(options *webutil.Options) {
+	if err := web.Startup("go.micro.api.basic", new(start), func(options *web.Options) {
 		options.IsLogToES = false
 		options.IsTrace = false
 		options.IsMonitor = false

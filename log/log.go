@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/liuyuexclusive/utils/appconfig"
-	"github.com/liuyuexclusive/utils/elastic"
+	"github.com/liuyuexclusive/utils/es"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -13,7 +13,7 @@ import (
 
 // LogToES logrus to elastic
 func LogToES(index string) error {
-	client, err := elastic.Client()
+	client, err := es.Client()
 	if err != nil {
 		logrus.Error(err)
 		return err

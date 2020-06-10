@@ -1,4 +1,4 @@
-package appconfigutil
+package appconfig
 
 import (
 	"reflect"
