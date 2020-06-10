@@ -44,8 +44,8 @@ services:
       - MICRO_TLS_CERT_FILE=/liuyuexclusvie.club.crt
       - MICRO_TLS_KEY_FILE=/liuyuexclusvie.club_key.key
     volumes:
-      - /Users/liuyu/golang/utils/tls/liuyuexclusvie.club.crt:/liuyuexclusvie.club.crt
-      - /Users/liuyu/golang/utils/tls/liuyuexclusvie.club_key.key:/liuyuexclusvie.club_key.key
+      - /Users/liuyu/golang/utils/ssl/liuyuexclusvie.club.crt:/liuyuexclusvie.club.crt
+      - /Users/liuyu/golang/utils/ssl/liuyuexclusvie.club_key.key:/liuyuexclusvie.club_key.key
 
   micro-web:
     image: micro/micro

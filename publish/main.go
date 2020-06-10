@@ -11,7 +11,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/liuyuexclusive/utils/executil"
+	"github.com/liuyuexclusive/utils/command"
 )
 
 type Publish struct {
@@ -114,7 +114,7 @@ func publish() {
 
 	fmt.Println(cmd)
 
-	executil.Run("sh", "-c", cmd)
+	command.Run("sh", "-c", cmd)
 
 	fmt.Printf("总耗时:%f秒\n", time.Since(now).Seconds())
 }
