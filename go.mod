@@ -18,10 +18,13 @@ require (
 	github.com/micro/go-plugins/wrapper/monitoring/prometheus/v2 v2.8.0
 	github.com/micro/go-plugins/wrapper/trace/opentracing/v2 v2.8.0
 	github.com/miekg/dns v1.1.29 // indirect
+	github.com/mitchellh/go-homedir v1.1.0
 	github.com/olivere/elastic/v7 v7.0.16
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/prometheus/client_golang v1.6.0
 	github.com/sirupsen/logrus v1.6.0
+	github.com/spf13/cobra v1.0.0
+	github.com/spf13/viper v1.7.0
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/uber/jaeger-client-go v2.23.1+incompatible
 	github.com/uber/jaeger-lib v2.2.0+incompatible // indirect
