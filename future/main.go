@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/liuyuexclusive/utils/publish/cmd"
+import "github.com/liuyuexclusive/utils/future/cmd"
 
 func main() {
   cmd.Execute()
