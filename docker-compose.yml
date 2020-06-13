@@ -1,63 +1,63 @@
 version: "3"
 services:
-  # mysql:
-  #   image: mysql:latest
-  #   ports: 
-  #     - 3306:3306
-  #     - 33060:33060
-  #   command: --default-authentication-plugin=mysql_native_password
-  #   environment:
-  #     - MYSQL_ROOT_PASSWORD=123456
-  #   volumes:
-  #     - /Users/liuyu/docker_volumes/mysql:/var/lib/mysql
-  #     - /Users/liuyu/docker_volumes/future.sql:/docker-entrypoint-initdb.d/future.sql
+  mysql:
+    image: mysql:latest
+    ports: 
+      - 3306:3306
+      - 33060:33060
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - /Users/liuyu/docker_volumes/mysql:/var/lib/mysql
+      - /Users/liuyu/docker_volumes/future.sql:/docker-entrypoint-initdb.d/future.sql
 
-  # etcd:
-  #   image: 'bitnami/etcd:latest'
-  #   environment:
-  #     - ALLOW_NONE_AUTHENTICATION=yes
-  #     - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
-  #   ports:
-  #     - 2379:2379
-  #     - 2380:2380
+  etcd:
+    image: 'bitnami/etcd:latest'
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    ports:
+      - 2379:2379
+      - 2380:2380
       
-  # nats: 
-  #   image: nats
-  #   ports:
-  #     - 4222:4222
-  #     - 8222:8222     
+  nats: 
+    image: nats
+    ports:
+      - 4222:4222
+      - 8222:8222     
 
-  # micro-api:
-  #   image: micro/micro
-  #   command: api
-  #   depends_on:
-  #     - etcd
-  #   ports:
-  #     - 9000:8080
-  #   environment:
-  #     - MICRO_ADDRESS=:8080
-  #     - MICRO_REGISTRY=etcd
-  #     - MICRO_REGISTRY_ADDRESS=etcd:2379
-  #     - MICRO_API_HANDLER=http
-  #     - MICRO_API_NAMESPACE=go.micro.api
-  #     - MICRO_ENABLE_TLS=true 
-  #     - MICRO_TLS_CERT_FILE=/liuyuexclusvie.club.crt
-  #     - MICRO_TLS_KEY_FILE=/liuyuexclusvie.club_key.key
-  #   volumes:
-  #     - /Users/liuyu/golang/utils/ssl/liuyuexclusvie.club.crt:/liuyuexclusvie.club.crt
-  #     - /Users/liuyu/golang/utils/ssl/liuyuexclusvie.club_key.key:/liuyuexclusvie.club_key.key
+  micro-api:
+    image: micro/micro
+    command: api
+    depends_on:
+      - etcd
+    ports:
+      - 9000:8080
+    environment:
+      - MICRO_ADDRESS=:8080
+      - MICRO_REGISTRY=etcd
+      - MICRO_REGISTRY_ADDRESS=etcd:2379
+      - MICRO_API_HANDLER=http
+      - MICRO_API_NAMESPACE=go.micro.api
+      - MICRO_ENABLE_TLS=true 
+      - MICRO_TLS_CERT_FILE=/liuyuexclusvie.club.crt
+      - MICRO_TLS_KEY_FILE=/liuyuexclusvie.club_key.key
+    volumes:
+      - /Users/liuyu/golang/utils/ssl/liuyuexclusvie.club.crt:/liuyuexclusvie.club.crt
+      - /Users/liuyu/golang/utils/ssl/liuyuexclusvie.club_key.key:/liuyuexclusvie.club_key.key
 
-  # micro-web:
-  #   image: micro/micro
-  #   command: web
-  #   depends_on:
-  #     - etcd
-  #   ports:
-  #     - 8082:8082
-  #   environment:
-  #     - MICRO_ADDRESS=:8082
-  #     - MICRO_REGISTRY=etcd
-  #     - MICRO_REGISTRY_ADDRESS=etcd:2379
+  micro-web:
+    image: micro/micro
+    command: web
+    depends_on:
+      - etcd
+    ports:
+      - 8082:8082
+    environment:
+      - MICRO_ADDRESS=:8082
+      - MICRO_REGISTRY=etcd
+      - MICRO_REGISTRY_ADDRESS=etcd:2379
 
   # elasticsearch:
   #   image: elasticsearch:7.4.0
@@ -183,12 +183,12 @@ services:
   #   ports:
   #     - "5000:5000"
 
-  redis:
-    image: redis
-    ports:
-      - 6379:6379
-    volumes:
-      - /Users/liuyu/docker_volumes/redis:/data
+  # redis:
+  #   image: redis
+  #   ports:
+  #     - 6379:6379
+  #   volumes:
+  #     - /Users/liuyu/docker_volumes/redis:/data
 
   # consul: 
   #   image: consul

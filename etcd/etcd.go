@@ -9,8 +9,12 @@ import (
 	"go.etcd.io/etcd/clientv3"
 )
 
+type KV interface {
+	clientv3.KV
+}
+
 // Open 操作etcd kv
-func Open(fn func(kv clientv3.KV) error) error {
+func Open(fn func(kv KV) error) error {
 	config := clientv3.Config{
 		Endpoints:   []string{appconfig.MustGet().ETCDAddress},
 		DialTimeout: 10 * time.Second,
