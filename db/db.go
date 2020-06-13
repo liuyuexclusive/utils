@@ -8,8 +8,12 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+type DB struct {
+	*gorm.DB
+}
+
 // Open 操作MYSQL数据库
-func Open(f func(*gorm.DB) error) error {
+func Open(f func(*DB) error) error {
 	defer func() {
 		if r := recover(); r != nil {
 			logrus.Error(r)
@@ -23,7 +27,7 @@ func Open(f func(*gorm.DB) error) error {
 	defer gdb.Close()
 	gdb.LogMode(false)
 	gdb.SingularTable(true)
-	err = f(gdb)
+	err = f(&DB{gdb})
 	if err != nil {
 		logrus.Error(err)
 		return err

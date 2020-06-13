@@ -3,13 +3,12 @@ package db
 import (
 	"testing"
 
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 func TestOpen(t *testing.T) {
 	type args struct {
-		f func(*gorm.DB) error
+		f func(*DB) error
 	}
 	tests := []struct {
 		name    string
