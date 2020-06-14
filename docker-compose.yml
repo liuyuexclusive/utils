@@ -9,8 +9,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=123456
     volumes:
-      - /Users/liuyu/docker_volumes/mysql:/var/lib/mysql
-      - /Users/liuyu/docker_volumes/future.sql:/docker-entrypoint-initdb.d/future.sql
+      - $HOME/docker_volumes/mysql:/var/lib/mysql
+      - $HOME/docker_volumes/future.sql:/docker-entrypoint-initdb.d/future.sql
 
   etcd:
     image: 'bitnami/etcd:latest'
@@ -41,11 +41,11 @@ services:
       - MICRO_API_HANDLER=http
       - MICRO_API_NAMESPACE=go.micro.api
       - MICRO_ENABLE_TLS=true 
-      - MICRO_TLS_CERT_FILE=/liuyuexclusvie.club.crt
-      - MICRO_TLS_KEY_FILE=/liuyuexclusvie.club_key.key
+      - MICRO_TLS_CERT_FILE=/entropic-death.site.crt
+      - MICRO_TLS_KEY_FILE=/entropic-death.site_key.key
     volumes:
-      - /Users/liuyu/golang/utils/ssl/liuyuexclusvie.club.crt:/liuyuexclusvie.club.crt
-      - /Users/liuyu/golang/utils/ssl/liuyuexclusvie.club_key.key:/liuyuexclusvie.club_key.key
+      - $HOME/golang/utils/ssl/entropic-death.site.crt:/entropic-death.site.crt
+      - $HOME/golang/utils/ssl/entropic-death.site_key.key:/entropic-death.site_key.key
 
   micro-web:
     image: micro/micro
@@ -67,15 +67,15 @@ services:
   #     discovery.type: "single-node"
   #     ES_JAVA_OPTS: " -Xms256m -Xmx256m"
   #   volumes:
-  #     - /Users/liuyu/docker_volumes/elasticsearch:/usr/share/elasticsearch/data
+  #     - $HOME/docker_volumes/elasticsearch:/usr/share/elasticsearch/data
     
   # kibana:
   #   image: kibana:7.4.0
   #   ports:
   #     - 5601:5601
   #   volumes:
-  #     - /Users/liuyu/docker_volumes/kibana.yml:/usr/share/kibana/config/kibana.yml
-  #   # docker cp /Users/liuyu/kibana.yml crawler_kibana_1:/usr/share/kibana/config/kibana.yml
+  #     - $HOME/docker_volumes/kibana.yml:/usr/share/kibana/config/kibana.yml
+  #   # docker cp $HOME/kibana.yml crawler_kibana_1:/usr/share/kibana/config/kibana.yml
   
   # jaeger-collector:
   #   image: jaegertracing/jaeger-collector
@@ -122,7 +122,7 @@ services:
   #   ports: 
   #     - 9090:9090
   #   volumes:
-  #     - /Users/liuyu/docker_volumes/prometheus.yml:/etc/prometheus/prometheus.yml
+  #     - $HOME/docker_volumes/prometheus.yml:/etc/prometheus/prometheus.yml
 
   # grafana:
   #   image: grafana/grafana
@@ -139,7 +139,7 @@ services:
   #     - "3000:3000"
   #     - "22:22"
   #   volumes:
-  #     - /Users/liuyu/docker_volumes/gogs:/data
+  #     - $HOME/docker_volumes/gogs:/data
 
   # drone:
   #   image: drone/drone
@@ -161,7 +161,7 @@ services:
   #     - detach=true
   #   volumes:
   #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - /Users/liuyu/docker_volumes/drone:/data
+  #     - $HOME/docker_volumes/drone:/data
 
   # drone-runner-docker:
   #   image: drone/drone-runner-docker:1
@@ -188,14 +188,14 @@ services:
   #   ports:
   #     - 6379:6379
   #   volumes:
-  #     - /Users/liuyu/docker_volumes/redis:/data
+  #     - $HOME/docker_volumes/redis:/data
 
   # consul: 
   #   image: consul
   #   ports:
   #     - 8500:8500
   #   volumes:
-  #     - /Users/liuyu/docker_volumes/consul:/consul/data
+  #     - $HOME/docker_volumes/consul:/consul/data
 
 # networks:
 #   default:

@@ -105,6 +105,7 @@ type Starter interface {
 }
 
 type Options struct {
+	IsOpenSwagger bool
 	// 是否记录日志到ES 默认为false
 	IsLogToES bool
 	// 是否使用opentrace(jaeger)
@@ -123,10 +124,11 @@ type Option func(ops *Options)
 
 func Startup(name string, starter Starter, opts ...Option) error {
 	options := &Options{
+		IsOpenSwagger: false,
 		IsLogToES:     false,
 		IsTrace:       false,
 		IsAllowOrigin: false,
-		IsRateLimite:  true,
+		IsRateLimite:  false,
 		Port:          "",
 	}
 
@@ -193,13 +195,15 @@ func Startup(name string, starter Starter, opts ...Option) error {
 		logrus.Infoln("开启链路追踪")
 	}
 
-	var swaggerPath, swaggerURL string
-
 	head := strings.TrimPrefix(name, "go.micro.api.")
-	swaggerPath = fmt.Sprintf("/%s/swagger/*any", head)
-	swaggerURL = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", config.HostIP, config.APIPort, head)
 
-	UseSwagger(swaggerPath, swaggerURL, router)
+	if options.IsOpenSwagger {
+		var swaggerPath, swaggerURL string
+		swaggerPath = fmt.Sprintf("/%s/swagger/*any", head)
+		swaggerURL = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", config.HostIP, config.APIPort, head)
+
+		UseSwagger(swaggerPath, swaggerURL, router)
+	}
 
 	if options.IsMonitor {
 		router.Use(
