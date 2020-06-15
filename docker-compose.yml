@@ -10,7 +10,7 @@ services:
       - MYSQL_ROOT_PASSWORD=123456
     volumes:
       - $HOME/docker_volumes/mysql:/var/lib/mysql
-      - $HOME/docker_volumes/future.sql:/docker-entrypoint-initdb.d/future.sql
+      - $HOME/future.sql:/docker-entrypoint-initdb.d/future.sql
 
   etcd:
     image: 'bitnami/etcd:latest'
@@ -44,8 +44,8 @@ services:
       - MICRO_TLS_CERT_FILE=/entropic-death.site.crt
       - MICRO_TLS_KEY_FILE=/entropic-death.site_key.key
     volumes:
-      - $HOME/golang/utils/ssl/entropic-death.site.crt:/entropic-death.site.crt
-      - $HOME/golang/utils/ssl/entropic-death.site_key.key:/entropic-death.site_key.key
+      - $HOME/ssl/entropic-death.site.crt:/entropic-death.site.crt
+      - $HOME/ssl/entropic-death.site_key.key:/entropic-death.site_key.key
 
   micro-web:
     image: micro/micro
@@ -200,4 +200,4 @@ services:
 # networks:
 #   default:
 #     external:
-#       name: lynet
+#       name: future_default
