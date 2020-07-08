@@ -26,3 +26,12 @@ func Open(f func(client *Client) error) error {
 	}
 	return nil
 }
+
+func GetClient() *Client {
+	client := r.NewClient(&r.Options{
+		Addr:     appconfig.MustGet().RedisAddress,
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+	return &Client{Client: client}
+}

@@ -2,10 +2,8 @@ package web
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"math/rand"
 	"net/http"
 	"strings"
@@ -77,12 +75,7 @@ func RateLimite() gin.HandlerFunc {
 }
 
 func ReadBody(c *gin.Context, data interface{}) bool {
-	bytes, err := ioutil.ReadAll(c.Request.Body)
-	if err != nil {
-		Bad(c, err)
-		return false
-	}
-	if err := json.Unmarshal(bytes, data); err != nil {
+	if err := c.ShouldBindJSON(data); err != nil {
 		Bad(c, err)
 		return false
 	}
