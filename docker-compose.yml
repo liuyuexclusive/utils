@@ -1,30 +1,40 @@
 version: "3"
-services:
-  mongo:
-    image: mongo:latest
+services:  
+  postgres:
+    image: postgres
+    environment: 
+      - POSTGRES_PASSWORD=123456
     ports:
-      - 27017:27017
+      - 5432:5432
     volumes:
-      - $HOME/docker_volumes/mongo:/data/db
-  
+      - $HOME/docker_volumes/postgres:/var/lib/postgresql/data
+      - $HOME/future_postgres.sql:/docker-entrypoint-initdb.d/future_postgres.sql
+
+  # mysql:
+  #   image: mysql:latest
+  #   ports: 
+  #     - 3306:3306
+  #     - 33060:33060
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=123456
+  #   volumes:
+  #     - $HOME/docker_volumes/mysql:/var/lib/mysql
+  #     - $HOME/future.sql:/docker-entrypoint-initdb.d/future.sql
+
   redis:
     image: redis
     ports:
       - 6379:6379
     volumes:
       - $HOME/docker_volumes/redis:/data
-
-  mysql:
-    image: mysql:latest
-    ports: 
-      - 3306:3306
-      - 33060:33060
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      - MYSQL_ROOT_PASSWORD=123456
-    volumes:
-      - $HOME/docker_volumes/mysql:/var/lib/mysql
-      - $HOME/future.sql:/docker-entrypoint-initdb.d/future.sql
+  
+  # mongo:
+  #   image: mongo:latest
+  #   ports:
+  #     - 27017:27017
+  #   volumes:
+  #     - $HOME/docker_volumes/mongo:/data/db
 
   # etcd:
   #   image: 'bitnami/etcd:latest'

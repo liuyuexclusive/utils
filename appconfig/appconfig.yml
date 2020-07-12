@@ -1,9 +1,9 @@
 apiport: "9000"
-connstr: root:123456@tcp(192.168.0.102:3306)/future?charset=utf8&parseTime=True&loc=Local
-elasticurl: http://192.168.0.102:9200
-etcdaddress: 192.168.0.102:2379
-hostip: 192.168.0.102
-jaegeraddress: 192.168.0.102:6831
+connstr: host=192.168.1.100 port=5432 password=123456 sslmode=disable user=postgres dbname=future
+elasticurl: http://192.168.1.100:9200
+etcdaddress: 192.168.1.100:2379
+hostip: 192.168.1.100
+jaegeraddress: 192.168.1.100:6831
 name: test
-natsaddress: 192.168.0.102:4222
-redisaddress: 192.168.0.102:6379
+natsaddress: 192.168.1.100:4222
+redisaddress: 192.168.1.100:6379

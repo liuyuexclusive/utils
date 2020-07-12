@@ -4,7 +4,7 @@ import (
 	"github.com/liuyuexclusive/utils/appconfig"
 
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql" //使用mysql数据库
+	_ "github.com/jinzhu/gorm/dialects/postgres" //使用mysql数据库
 	"github.com/sirupsen/logrus"
 )
 
@@ -22,7 +22,7 @@ func Open(f func(*DB) error) error {
 
 	config := appconfig.MustGet()
 
-	gdb, err := gorm.Open("mysql", config.ConnStr)
+	gdb, err := gorm.Open("postgres", config.ConnStr)
 
 	defer gdb.Close()
 	gdb.LogMode(false)

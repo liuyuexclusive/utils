@@ -50,9 +50,9 @@ func initenv() {
 	strCmd := `
 	scp $HOME/golang/utils/docker-compose.yml root@{{.H}}:
 	scp $HOME/golang/utils/Makefile root@{{.H}}:
-	scp $HOME/golang/utils/future.sql root@{{.H}}:
+	scp $HOME/golang/utils/future_postgres.sql root@{{.H}}:
 	scp $HOME/golang/utils/kibana.yml root@{{.H}}:
-	scp $HOME/golang/utils/prometheus.sql root@{{.H}}:
+	scp $HOME/golang/utils/prometheus.yml root@{{.H}}:
 	scp -r $HOME/golang/utils/ssl root@{{.H}}:
 `
 	t, err := tem.Parse(strCmd)
