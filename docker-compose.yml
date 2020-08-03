@@ -1,14 +1,14 @@
 version: "3"
 services:  
-  postgres:
-    image: postgres
-    environment: 
-      - POSTGRES_PASSWORD=123456
-    ports:
-      - 5432:5432
-    volumes:
-      - $HOME/docker_volumes/postgres:/var/lib/postgresql/data
-      - $HOME/future_postgres.sql:/docker-entrypoint-initdb.d/future_postgres.sql
+  # postgres:
+  #   image: postgres
+  #   environment: 
+  #     - POSTGRES_PASSWORD=123456
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - $HOME/docker_volumes/postgres:/var/lib/postgresql/data
+  #     - $HOME/future_postgres.sql:/docker-entrypoint-initdb.d/future_postgres.sql
 
   # mysql:
   #   image: mysql:latest
@@ -51,37 +51,37 @@ services:
       - 4222:4222
       - 8222:8222     
 
-  micro-api:
-    image: micro/micro
-    command: api
-    depends_on:
-      - etcd
-    ports:
-      - 9000:8080
-    environment:
-      - MICRO_ADDRESS=:8080
-      - MICRO_REGISTRY=etcd
-      - MICRO_REGISTRY_ADDRESS=etcd:2379
-      - MICRO_API_HANDLER=http
-      - MICRO_API_NAMESPACE=go.micro.api
-      # - MICRO_ENABLE_TLS=true 
-      # - MICRO_TLS_CERT_FILE=/entropic-death.site.crt
-      # - MICRO_TLS_KEY_FILE=/entropic-death.site_key.key
-    # volumes:
-    #   - $HOME/ssl/entropic-death.site.crt:/entropic-death.site.crt
-    #   - $HOME/ssl/entropic-death.site_key.key:/entropic-death.site_key.key
+  # micro-api:
+  #   image: micro/micro
+  #   command: api
+  #   depends_on:
+  #     - etcd
+  #   ports:
+  #     - 9000:8080
+  #   environment:
+  #     - MICRO_ADDRESS=:8080
+  #     - MICRO_REGISTRY=etcd
+  #     - MICRO_REGISTRY_ADDRESS=etcd:2379
+  #     - MICRO_API_HANDLER=http
+  #     - MICRO_API_NAMESPACE=go.micro.api
+  #     # - MICRO_ENABLE_TLS=true 
+  #     # - MICRO_TLS_CERT_FILE=/entropic-death.site.crt
+  #     # - MICRO_TLS_KEY_FILE=/entropic-death.site_key.key
+  #   # volumes:
+  #   #   - $HOME/ssl/entropic-death.site.crt:/entropic-death.site.crt
+  #   #   - $HOME/ssl/entropic-death.site_key.key:/entropic-death.site_key.key
 
-  micro-web:
-    image: micro/micro
-    command: web
-    depends_on:
-      - etcd
-    ports:
-      - 8082:8082
-    environment:
-      - MICRO_ADDRESS=:8082
-      - MICRO_REGISTRY=etcd
-      - MICRO_REGISTRY_ADDRESS=etcd:2379
+  # micro-web:
+  #   image: micro/micro
+  #   command: web
+  #   depends_on:
+  #     - etcd
+  #   ports:
+  #     - 8082:8082
+  #   environment:
+  #     - MICRO_ADDRESS=:8082
+  #     - MICRO_REGISTRY=etcd
+  #     - MICRO_REGISTRY_ADDRESS=etcd:2379
 
   # elasticsearch:
   #   image: elasticsearch:7.4.0
