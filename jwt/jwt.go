@@ -1,7 +1,7 @@
 package jwt
 
 import (
-	"crypto/sha512"
+	"crypto/sha256"
 	"encoding/hex"
 	"errors"
 	"time"
@@ -11,8 +11,8 @@ import (
 
 const mySigningKey string = "sadhasldjkko126312jljdkhfasu0"
 
-func Sha512(s string, salt string) string {
-	h := sha512.New()
+func Sha256(s string, salt string) string {
+	h := sha256.New()
 	h.Write([]byte(s + salt))
 	return hex.EncodeToString(h.Sum(nil))
 }
@@ -31,7 +31,7 @@ func GetToken(id string) (string, error) {
 		Id:        id,
 	}
 
-	token, err := jwt.NewWithClaims(jwt.SigningMethodHS512, claims).SignedString(mySigningKey)
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(mySigningKey)
 
 	if err != nil {
 		return "", err
