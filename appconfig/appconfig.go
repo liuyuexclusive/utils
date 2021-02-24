@@ -38,15 +38,7 @@ func MustGet() *Config {
 
 	var config Config
 
-	config.Name = viper.GetString("Name")
-	config.ETCDAddress = viper.GetString("ETCDAddress")
-	config.NatsAddress = viper.GetString("NatsAddress")
-	config.ElasticURL = viper.GetString("ElasticURL")
-	config.HostIP = viper.GetString("HostIP")
-	config.APIPort = viper.GetString("APIPort")
-	config.ConnStr = viper.GetString("ConnStr")
-	config.RedisAddress = viper.GetString("RedisAddress")
-	config.JaegerAddress = viper.GetString("JaegerAddress")
+	viper.Unmarshal(&config)
 
 	return &config
 }

@@ -1,22 +1,23 @@
 module github.com/liuyuexclusive/utils
 
-go 1.13
+go 1.15
 
 require (
 	github.com/ahmetb/go-linq v3.0.0+incompatible
 	github.com/codahale/hdrhistogram v0.0.0-20161010025455-3a0bb77429bd // indirect
 	github.com/coreos/etcd v3.3.22+incompatible // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-redis/redis v6.15.8+incompatible
 	github.com/gogo/protobuf v1.3.1 // indirect
-	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/gorilla/websocket v1.4.2
 	github.com/jinzhu/gorm v1.9.12
 	github.com/juju/ratelimit v1.0.1
 	github.com/micro/go-micro/v2 v2.8.0
 	github.com/micro/go-plugins/wrapper/monitoring/prometheus/v2 v2.8.0
 	github.com/micro/go-plugins/wrapper/trace/opentracing/v2 v2.8.0
+	github.com/micro/micro/v3 v3.0.1 // indirect
 	github.com/miekg/dns v1.1.29 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/olivere/elastic/v7 v7.0.16

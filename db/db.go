@@ -25,7 +25,7 @@ func Open(f func(*DB) error) error {
 	gdb, err := gorm.Open("postgres", config.ConnStr)
 
 	defer gdb.Close()
-	gdb.LogMode(false)
+	gdb.LogMode(true)
 	gdb.SingularTable(true)
 	err = f(&DB{gdb})
 	if err != nil {
