@@ -1,0 +1,42 @@
+version: "2"
+services:
+  master_mongo:
+    container_name: master_mongo
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    command: ["--replSet","r1"]
+  backup_mongo:
+    container_name: backup_mongo
+    image: mongo:latest
+    ports:
+      - 27018:27017
+    command: ["--replSet","r1"]
+  arbi_mongo:
+    container_name: arbi_mongo
+    image: mongo:latest
+    ports:
+      - 27019:27017
+    command: ["--replSet","r1"]
+
+
+config = {
+    "_id" : "r1",
+    "members" : [
+        {
+            "_id" : 0,
+            "host" : "master_mongo:27017"
+        },
+        {
+            "_id" : 1,
+            "host" : "backup_mongo:27017"
+        },
+        {
+            "_id" : 2,
+            "host" : "arbi_mongo:27017"
+        }
+    ]
+}
+
+
+rs.initiate(config)
