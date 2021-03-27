@@ -6,19 +6,24 @@ services:
     ports:
       - 27017:27017
     command: ["--replSet","r1"]
+    volumes:
+      - $HOME/docker_volumes/mongo/db1:/data/db
   backup_mongo:
     container_name: backup_mongo
     image: mongo:latest
     ports:
       - 27018:27017
     command: ["--replSet","r1"]
+    volumes:
+      - $HOME/docker_volumes/mongo/db2:/data/db
   arbi_mongo:
     container_name: arbi_mongo
     image: mongo:latest
     ports:
       - 27019:27017
     command: ["--replSet","r1"]
-
+    volumes:
+      - $HOME/docker_volumes/mongo/db3:/data/db
 
 config = {
     "_id" : "r1",
