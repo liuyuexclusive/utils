@@ -4,44 +4,54 @@ services:
     container_name: master_mongo
     image: mongo:latest
     ports:
-      - 27017:27017
+      - 37017:27017
     command: ["--replSet","r1"]
     volumes:
-      - $HOME/docker_volumes/mongo/db1:/data/db
+      - /data/cluster/db1:/data/db
   backup_mongo:
     container_name: backup_mongo
     image: mongo:latest
     ports:
-      - 27018:27017
+      - 37018:27017
     command: ["--replSet","r1"]
     volumes:
-      - $HOME/docker_volumes/mongo/db2:/data/db
+      - /data/cluster/db2:/data/db
   arbi_mongo:
     container_name: arbi_mongo
     image: mongo:latest
     ports:
-      - 27019:27017
+      - 37019:27017
     command: ["--replSet","r1"]
     volumes:
-      - $HOME/docker_volumes/mongo/db3:/data/db
+      - /data/cluster/db3:/data/db
+
 
 config = {
-    "_id" : "r1",
+    "_id" : "myset",
     "members" : [
         {
             "_id" : 0,
-            "host" : "master_mongo:27017"
+            "host" : "172.32.0.253:37017"
         },
         {
             "_id" : 1,
-            "host" : "backup_mongo:27017"
+            "host" : "172.32.0.253:37018"
         },
         {
             "_id" : 2,
-            "host" : "arbi_mongo:27017"
+            "host" : "172.32.0.253:37019"
         }
     ]
 }
 
 
 rs.initiate(config)
+
+
+db.createUser(  
+    {
+        user: "poolweb",  
+        pwd: "tanxjrw2020",  
+        roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]  
+    }
+)
