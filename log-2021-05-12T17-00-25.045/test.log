@@ -1,0 +1,4 @@
+2021-05-13T00:48:56.340+0800	INFO	log/log_test.go:12	this is a test.log
+2021-05-13T00:49:10.971+0800	FATAL	log/log_test.go:12	this is a test.log
+2021-05-13T00:49:21.226+0800	ERROR	log/log_test.go:12	this is a test.log
+2021-05-13T00:49:57.411+0800	PANIC	log/log_test.go:12	this is a test.log
