@@ -3,30 +3,30 @@ package etcd
 import (
 	"time"
 
-	"github.com/liuyuexclusive/utils/appconfig"
+	"github.com/liuyuexclusive/utils/config"
 	"github.com/sirupsen/logrus"
 
-	"go.etcd.io/etcd/clientv3"
+	etcd "go.etcd.io/etcd/client/v3"
 )
 
 type KV interface {
-	clientv3.KV
+	etcd.KV
 }
 
 // Open 操作etcd kv
 func Open(fn func(kv KV) error) error {
-	config := clientv3.Config{
-		Endpoints:   []string{appconfig.MustGet().ETCDAddress},
+	config := etcd.Config{
+		Endpoints:   []string{config.MustGet().ETCDAddress},
 		DialTimeout: 10 * time.Second,
 	}
-	client, err := clientv3.New(config)
+	client, err := etcd.New(config)
 	if err != nil {
 		logrus.Error(err)
 		return nil
 	}
 	defer client.Close()
 
-	kv := clientv3.NewKV(client)
+	kv := etcd.NewKV(client)
 
 	err = fn(kv)
 

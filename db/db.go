@@ -1,7 +1,7 @@
 package db
 
 import (
-	"github.com/liuyuexclusive/utils/appconfig"
+	"github.com/liuyuexclusive/utils/config"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres" //使用mysql数据库
@@ -12,7 +12,6 @@ type DB struct {
 	*gorm.DB
 }
 
-// Open 操作MYSQL数据库
 func Open(f func(*DB) error) error {
 	defer func() {
 		if r := recover(); r != nil {
@@ -20,9 +19,9 @@ func Open(f func(*DB) error) error {
 		}
 	}()
 
-	config := appconfig.MustGet()
+	cfg := config.MustGet()
 
-	gdb, err := gorm.Open("postgres", config.ConnStr)
+	gdb, err := gorm.Open("postgres", cfg.ConnStr)
 
 	defer gdb.Close()
 	gdb.LogMode(true)

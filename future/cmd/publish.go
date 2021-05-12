@@ -25,7 +25,7 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/liuyuexclusive/utils/command"
+	"github.com/liuyuexclusive/utils/cmd"
 	"github.com/spf13/cobra"
 )
 
@@ -134,11 +134,11 @@ func publish() {
 
 	tem.Execute(buf, &publish)
 
-	cmd := buf.String()
+	command := buf.String()
 
-	fmt.Println(cmd)
+	fmt.Println(command)
 
-	command.Run("sh", "-c", cmd)
+	cmd.Run("sh", "-c", command)
 
 	fmt.Printf("总耗时:%f秒\n", time.Since(now).Seconds())
 }

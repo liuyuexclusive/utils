@@ -16,7 +16,7 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/liuyuexclusive/utils/appconfig"
+	"github.com/liuyuexclusive/utils/config"
 	"github.com/spf13/cobra"
 )
 
@@ -50,5 +50,5 @@ func init() {
 }
 
 func genConfig() {
-	appconfig.MustGet()
+	config.MustGet()
 }

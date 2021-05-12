@@ -29,12 +29,39 @@ services:
     volumes:
       - $HOME/docker_volumes/redis:/data
   
-  mongo:
-    image: mongo:latest
-    ports:
-      - 27017:27017
-    volumes:
-      - $HOME/docker_volumes/mongo:/data/db
+  # mongo:
+  #   image: mongo:latest
+  #   ports:
+  #     - 27017:27017
+  #   volumes:
+  #     - $HOME/docker_volumes/mongo:/data/db
+
+  #------------------------------------------------
+
+  #   master_mongo:
+  #   container_name: master_mongo
+  #   image: mongo:latest
+  #   ports:
+  #     - 37017:27017
+  #   command: ["--replSet","myset","--bind_ip_all"]
+  #   volumes:
+  #     - /data/cluster/db1:/data/db
+  #   backup_mongo:
+  #   container_name: backup_mongo
+  #   image: mongo:latest
+  #   ports:
+  #     - 37018:27017
+  #   command: ["--replSet","myset","--bind_ip_all"]
+  #   volumes:
+  #     - /data/cluster/db2:/data/db
+  #   arbi_mongo:
+  #   container_name: arbi_mongo
+  #   image: mongo:latest
+  #   ports:
+  #     - 37019:27017
+  #   command: ["--replSet","myset","--bind_ip_all"]
+  #   volumes:
+  #     - /data/cluster/db3:/data/db
 
   etcd:
     image: 'bitnami/etcd:latest'

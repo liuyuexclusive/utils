@@ -1,7 +1,7 @@
 package redis
 
 import (
-	"github.com/liuyuexclusive/utils/appconfig"
+	"github.com/liuyuexclusive/utils/config"
 	"github.com/sirupsen/logrus"
 
 	r "github.com/go-redis/redis"
@@ -14,7 +14,7 @@ type Client struct {
 // Open 打开redis
 func Open(f func(client *Client) error) error {
 	client := r.NewClient(&r.Options{
-		Addr:     appconfig.MustGet().RedisAddress,
+		Addr:     config.MustGet().RedisAddress,
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
@@ -29,7 +29,7 @@ func Open(f func(client *Client) error) error {
 
 func GetClient() *Client {
 	client := r.NewClient(&r.Options{
-		Addr:     appconfig.MustGet().RedisAddress,
+		Addr:     config.MustGet().RedisAddress,
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})

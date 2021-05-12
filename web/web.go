@@ -2,32 +2,27 @@ package web
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math/rand"
 	"net/http"
-	"strings"
 	"time"
 
-	"github.com/micro/go-micro/v2/registry"
-	"github.com/micro/go-micro/v2/registry/etcd"
-
-	"github.com/liuyuexclusive/utils/appconfig"
-	"github.com/liuyuexclusive/utils/log"
-	"github.com/liuyuexclusive/utils/trace"
+	// "github.com/micro/go-micro/v2/registry"
+	// "github.com/micro/go-micro/v2/registry/etcd"
 
 	"github.com/gin-gonic/gin"
 	"github.com/juju/ratelimit"
-	"github.com/micro/go-micro/v2/broker"
-	"github.com/micro/go-micro/v2/broker/nats"
-	"github.com/micro/go-micro/v2/client"
-	"github.com/micro/go-micro/v2/web"
+
+	// "github.com/micro/go-micro/v2/broker"
+	// "github.com/micro/go-micro/v2/broker/nats"
+	// "github.com/micro/go-micro/v2/client"
+	// "github.com/micro/go-micro/v2/web"
 	"github.com/sirupsen/logrus"
 
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 
-	"github.com/micro/go-micro/v2/metadata"
+	// "github.com/micro/go-micro/v2/metadata"
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 	p "github.com/prometheus/client_golang/prometheus/promhttp"
@@ -115,106 +110,106 @@ type Options struct {
 
 type Option func(ops *Options)
 
-func Startup(name string, starter Starter, opts ...Option) error {
-	options := &Options{
-		IsOpenSwagger: false,
-		IsLogToES:     false,
-		IsTrace:       false,
-		IsAllowOrigin: false,
-		IsRateLimite:  false,
-		Port:          "",
-	}
+// func Startup(name string, starter Starter, opts ...Option) error {
+// 	options := &Options{
+// 		IsOpenSwagger: false,
+// 		IsLogToES:     false,
+// 		IsTrace:       false,
+// 		IsAllowOrigin: false,
+// 		IsRateLimite:  false,
+// 		Port:          "",
+// 	}
 
-	for _, opt := range opts {
-		opt(options)
-	}
+// 	for _, opt := range opts {
+// 		opt(options)
+// 	}
 
-	if options.IsLogToES {
-		log.LogToES(name)
-	}
+// 	if options.IsLogToES {
+// 		log.LogToES(name)
+// 	}
 
-	if name == "" {
-		return errors.New("请输入服务名称")
-	}
+// 	if name == "" {
+// 		return errors.New("请输入服务名称")
+// 	}
 
-	config := appconfig.MustGet()
-	client.DefaultClient.Init(client.Broker(nats.NewBroker(broker.Addrs(config.NatsAddress))))
+// 	config := appconfig.MustGet()
+// 	client.DefaultClient.Init(client.Broker(nats.NewBroker(broker.Addrs(config.NatsAddress))))
 
-	webOptions := []web.Option{
-		web.Name(name),
-		web.Version("latest"),
-		web.Registry(etcd.NewRegistry(registry.Addrs(config.ETCDAddress))),
-		web.RegisterTTL(time.Second * 30),
-		web.RegisterInterval(time.Second * 15),
-	}
-	if options.Port != "" {
-		webOptions = append(webOptions, web.Address(options.Port))
-	}
+// 	webOptions := []web.Option{
+// 		web.Name(name),
+// 		web.Version("latest"),
+// 		web.Registry(etcd.NewRegistry(registry.Addrs(config.ETCDAddress))),
+// 		web.RegisterTTL(time.Second * 30),
+// 		web.RegisterInterval(time.Second * 15),
+// 	}
+// 	if options.Port != "" {
+// 		webOptions = append(webOptions, web.Address(options.Port))
+// 	}
 
-	service := web.NewService(
-		webOptions...,
-	)
+// 	service := web.NewService(
+// 		webOptions...,
+// 	)
 
-	if err := service.Init(); err != nil {
-		return fmt.Errorf("服务初始化失败:%w", err)
-	}
+// 	if err := service.Init(); err != nil {
+// 		return fmt.Errorf("服务初始化失败:%w", err)
+// 	}
 
-	router := gin.Default()
+// 	router := gin.Default()
 
-	if options.IsAllowOrigin {
-		router.Use(
-			AllowOrigin(),
-		)
-		logrus.Infoln("开启跨域")
-	}
+// 	if options.IsAllowOrigin {
+// 		router.Use(
+// 			AllowOrigin(),
+// 		)
+// 		logrus.Infoln("开启跨域")
+// 	}
 
-	if options.IsRateLimite {
-		router.Use(
-			RateLimite(),
-		)
-		logrus.Infoln("开启限流")
-	}
+// 	if options.IsRateLimite {
+// 		router.Use(
+// 			RateLimite(),
+// 		)
+// 		logrus.Infoln("开启限流")
+// 	}
 
-	if options.IsTrace {
-		_, closer, err := trace.NewTracer(name, appconfig.MustGet().JaegerAddress)
+// 	if options.IsTrace {
+// 		_, closer, err := trace.NewTracer(name, appconfig.MustGet().JaegerAddress)
 
-		if err != nil {
-			logrus.Fatal(err)
-			return nil
-		}
-		defer closer.Close()
+// 		if err != nil {
+// 			logrus.Fatal(err)
+// 			return nil
+// 		}
+// 		defer closer.Close()
 
-		router.Use(TracerWrapper)
-		logrus.Infoln("开启链路追踪")
-	}
+// 		router.Use(TracerWrapper)
+// 		logrus.Infoln("开启链路追踪")
+// 	}
 
-	head := strings.TrimPrefix(name, "go.micro.api.")
+// 	head := strings.TrimPrefix(name, "go.micro.api.")
 
-	if options.IsOpenSwagger {
-		var swaggerPath, swaggerURL string
-		swaggerPath = fmt.Sprintf("/%s/swagger/*any", head)
-		swaggerURL = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", config.HostIP, config.APIPort, head)
+// 	if options.IsOpenSwagger {
+// 		var swaggerPath, swaggerURL string
+// 		swaggerPath = fmt.Sprintf("/%s/swagger/*any", head)
+// 		swaggerURL = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", config.HostIP, config.APIPort, head)
 
-		UseSwagger(swaggerPath, swaggerURL, router)
-	}
+// 		UseSwagger(swaggerPath, swaggerURL, router)
+// 	}
 
-	if options.IsMonitor {
-		router.Use(
-			Prometheus(head),
-		)
-	}
+// 	if options.IsMonitor {
+// 		router.Use(
+// 			Prometheus(head),
+// 		)
+// 	}
 
-	starter.Start(router)
+// 	starter.Start(router)
 
-	service.Handle("/", router)
+// 	service.Handle("/", router)
 
-	// run service
-	if err := service.Run(); err != nil {
-		return fmt.Errorf("服务运行错误:%w", err)
-	}
+// 	// run service
+// 	if err := service.Run(); err != nil {
+// 		return fmt.Errorf("服务运行错误:%w", err)
+// 	}
 
-	return nil
-}
+// 	return nil
+// }
 
 const contextTracerKey = "Tracer-context"
 
@@ -246,7 +241,7 @@ func TracerWrapper(c *gin.Context) {
 
 	ctx := context.TODO()
 	ctx = opentracing.ContextWithSpan(ctx, sp)
-	ctx = metadata.NewContext(ctx, md)
+	// ctx = metadata.NewContext(ctx, md)
 	c.Set(contextTracerKey, ctx)
 
 	c.Next()

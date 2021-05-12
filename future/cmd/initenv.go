@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"text/template"
 
-	"github.com/liuyuexclusive/utils/command"
+	"github.com/liuyuexclusive/utils/cmd"
 	"github.com/spf13/cobra"
 )
 
@@ -66,7 +66,7 @@ func initenv() {
 	}
 	str := buf.String()
 	fmt.Println(str)
-	command.Run("sh", "-c", str)
+	cmd.Run("sh", "-c", str)
 }
 
 func init() {
