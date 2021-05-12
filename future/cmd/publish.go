@@ -25,8 +25,8 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/liuyuexclusive/utils/cmd"
 	"github.com/spf13/cobra"
+	"github.com/yuexclusive/utils/cmd"
 )
 
 // publishCmd represents the publish command

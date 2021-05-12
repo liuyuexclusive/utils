@@ -3,8 +3,8 @@ package etcd
 import (
 	"time"
 
-	"github.com/liuyuexclusive/utils/config"
 	"github.com/sirupsen/logrus"
+	"github.com/yuexclusive/utils/config"
 
 	etcd "go.etcd.io/etcd/client/v3"
 )

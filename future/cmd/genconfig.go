@@ -16,8 +16,8 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/liuyuexclusive/utils/config"
 	"github.com/spf13/cobra"
+	"github.com/yuexclusive/utils/config"
 )
 
 // genconfigCmd represents the genconfig command

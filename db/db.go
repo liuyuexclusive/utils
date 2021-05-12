@@ -1,7 +1,7 @@
 package db
 
 import (
-	"github.com/liuyuexclusive/utils/config"
+	"github.com/yuexclusive/utils/config"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres" //使用mysql数据库

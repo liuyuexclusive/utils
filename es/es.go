@@ -1,7 +1,7 @@
 package es
 
 import (
-	"github.com/liuyuexclusive/utils/config"
+	"github.com/yuexclusive/utils/config"
 
 	elastic "github.com/olivere/elastic/v7"
 )

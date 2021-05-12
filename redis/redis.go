@@ -1,8 +1,8 @@
 package redis
 
 import (
-	"github.com/liuyuexclusive/utils/config"
 	"github.com/sirupsen/logrus"
+	"github.com/yuexclusive/utils/config"
 
 	r "github.com/go-redis/redis"
 )

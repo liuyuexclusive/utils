@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"text/template"
 
-	"github.com/liuyuexclusive/utils/cmd"
 	"github.com/spf13/cobra"
+	"github.com/yuexclusive/utils/cmd"
 )
 
 // initenvCmd represents the initenv command

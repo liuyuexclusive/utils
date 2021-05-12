@@ -1,4 +1,4 @@
-module github.com/liuyuexclusive/utils
+module github.com/yuexclusive/utils
 
 go 1.16
 
