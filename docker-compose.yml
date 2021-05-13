@@ -1,14 +1,14 @@
 version: "3"
 services:  
-  postgres:
-    image: postgres
-    environment: 
-      - POSTGRES_PASSWORD=123456
-    ports:
-      - 5432:5432
-    volumes:
-      - $HOME/docker_volumes/postgres:/var/lib/postgresql/data
-      - $HOME/future_postgres.sql:/docker-entrypoint-initdb.d/future_postgres.sql
+  # postgres:
+  #   image: postgres
+  #   environment: 
+  #     - POSTGRES_PASSWORD=123456
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - $HOME/docker_volumes/postgres:/var/lib/postgresql/data
+  #     - $HOME/future_postgres.sql:/docker-entrypoint-initdb.d/future_postgres.sql
 
   # mysql:
   #   image: mysql:latest
@@ -63,14 +63,14 @@ services:
   #   volumes:
   #     - /data/cluster/db3:/data/db
 
-  etcd:
-    image: 'bitnami/etcd:latest'
-    environment:
-      - ALLOW_NONE_AUTHENTICATION=yes
-      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
-    ports:
-      - 2379:2379
-      - 2380:2380
+  # etcd:
+  #   image: 'bitnami/etcd:latest'
+  #   environment:
+  #     - ALLOW_NONE_AUTHENTICATION=yes
+  #     - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+  #   ports:
+  #     - 2379:2379
+  #     - 2380:2380
       
   # nats: 
   #   image: nats
@@ -111,7 +111,7 @@ services:
   #     - MICRO_REGISTRY_ADDRESS=etcd:2379
 
   # elasticsearch:
-  #   image: elasticsearch:7.4.0
+  #   image: elasticsearch:7.12.1
   #   ports: 
   #     - 9200:9200
   #   environment:
@@ -121,7 +121,7 @@ services:
   #     - $HOME/docker_volumes/elasticsearch:/usr/share/elasticsearch/data
     
   # kibana:
-  #   image: kibana:7.4.0
+  #   image: kibana:7.12.1
   #   ports:
   #     - 5601:5601
   #   volumes:

@@ -16,6 +16,8 @@ type Config struct {
 	ConnStr       string `yaml:"ConnStr"`
 	RedisAddress  string `yaml:"RedisAddress"`
 	JaegerAddress string `yaml:"JaegerAddress"`
+	LogPath       string `yaml:"LogPath"`
+	LogLevel      string `yaml:"LogLevel"`
 }
 
 func MustGet() *Config {
