@@ -1,29 +1,43 @@
 package main
 
 import (
-	"os"
+	"net/http"
+	"time"
 
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
+	"github.com/gin-gonic/gin"
+
+	_ "github.com/yuexclusive/utils/docs"
+	"github.com/yuexclusive/utils/log"
+	"github.com/yuexclusive/utils/web"
 )
 
-func NewLogger() *zap.Logger {
-	// 限制日志输出级别, >= DebugLevel 会打印所有级别的日志
-	// 生产环境中一般使用 >= ErrorLevel
-	lowPriority := zap.LevelEnablerFunc(func(lv zapcore.Level) bool {
-		return lv >= zapcore.DebugLevel
-	})
-
-	// 使用 JSON 格式日志
-	jsonEnc := zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
-	stdCore := zapcore.NewCore(jsonEnc, zapcore.Lock(os.Stdout), lowPriority)
-
-	// logger 输出到 console 且标识调用代码行
-	return zap.New(stdCore).WithOptions(zap.AddCaller())
+// Auth godoc
+// @Summary
+// @Description
+// @Tags 获取token
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} string "output"
+// @Failure 400 {string} string "ok"
+// @Failure 404 {string} string "ok"
+// @Failure 500 {string} string "ok"
+// @Router /test/hello [get]
+func Hello(c *gin.Context) {
+	c.String(http.StatusOK, "good luck")
 }
 
 func main() {
-	logger := NewLogger()
+	log.Init()
+	engine := gin.Default()
 
-	logger.Info("test logger info", zap.String("hello", "logger"))
+	web.Prometheus(engine)
+	web.Swagger(engine)
+
+	engine.Use(web.AllowOrigin())
+	engine.Use(web.Tracer())
+	engine.Use(web.RateLimite(time.Second, 5))
+
+	engine.GET("/test/hello", Hello)
+
+	engine.Run(":8080")
 }

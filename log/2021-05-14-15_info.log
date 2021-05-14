@@ -1,0 +1,56 @@
+2021-05-14T15:04:01.522+0800	INFO	web/middleware.go:59	open swagger	{"url": "http://192.168.1.47:8080/test/swagger/doc.json", "path": "/test/swagger/*any"}
+2021-05-14T15:04:50.917+0800	INFO	web/middleware.go:44	open prometheus	{"path": "/metrics"}
+2021-05-14T15:04:50.919+0800	INFO	web/middleware.go:59	open swagger	{"url": "http://192.168.1.47:8080/test/swagger/doc.json", "path": "/test/swagger/*any"}
+2021-05-14T15:04:50.919+0800	INFO	web/middleware.go:64	open allow origin
+2021-05-14T15:04:50.919+0800	INFO	web/middleware.go:105	open trace
+2021-05-14T15:04:50.919+0800	INFO	web/middleware.go:81	open rate limit	{"duration": "5s", "capacity": 1000}
+2021-05-14T15:09:54.128+0800	INFO	web/middleware.go:44	open prometheus	{"path": "/metrics"}
+2021-05-14T15:09:54.129+0800	INFO	web/middleware.go:59	open swagger	{"url": "http://192.168.1.47:8080/test/swagger/doc.json", "path": "/test/swagger/*any"}
+2021-05-14T15:09:54.129+0800	INFO	web/middleware.go:64	open allow origin
+2021-05-14T15:09:54.129+0800	INFO	web/middleware.go:105	open trace
+2021-05-14T15:09:54.129+0800	INFO	web/middleware.go:81	open rate limit	{"duration": "5s", "capacity": 5}
+2021-05-14T15:12:22.161+0800	INFO	web/middleware.go:44	open prometheus	{"path": "/metrics"}
+2021-05-14T15:12:22.162+0800	INFO	web/middleware.go:59	open swagger	{"url": "http://192.168.1.47:8080/test/swagger/doc.json", "path": "/test/swagger/*any"}
+2021-05-14T15:12:22.162+0800	INFO	web/middleware.go:64	open allow origin
+2021-05-14T15:12:22.162+0800	INFO	web/middleware.go:106	open trace
+2021-05-14T15:12:22.162+0800	INFO	web/middleware.go:81	open rate limit	{"duration": "5s", "capacity": 5}
+2021-05-14T15:13:12.174+0800	INFO	web/middleware.go:44	open prometheus	{"path": "/metrics"}
+2021-05-14T15:13:12.175+0800	INFO	web/middleware.go:59	open swagger	{"url": "http://192.168.1.47:8080/test/swagger/doc.json", "path": "/test/swagger/*any"}
+2021-05-14T15:13:12.175+0800	INFO	web/middleware.go:64	open allow origin
+2021-05-14T15:13:12.175+0800	INFO	web/middleware.go:106	open trace
+2021-05-14T15:13:12.175+0800	INFO	web/middleware.go:81	open rate limit	{"duration": "5s", "capacity": 5}
+2021-05-14T15:13:58.895+0800	INFO	web/middleware.go:44	open prometheus	{"path": "/metrics"}
+2021-05-14T15:13:58.896+0800	INFO	web/middleware.go:59	open swagger	{"url": "http://192.168.1.47:8080/test/swagger/doc.json", "path": "/test/swagger/*any"}
+2021-05-14T15:13:58.896+0800	INFO	web/middleware.go:64	open allow origin
+2021-05-14T15:13:58.896+0800	INFO	web/middleware.go:106	open trace
+2021-05-14T15:13:58.896+0800	INFO	web/middleware.go:81	open rate limit	{"duration": "5s", "capacity": 5}
+2021-05-14T15:14:31.924+0800	INFO	web/middleware.go:44	open prometheus	{"path": "/metrics"}
+2021-05-14T15:14:31.926+0800	INFO	web/middleware.go:59	open swagger	{"url": "http://192.168.1.47:8080/test/swagger/doc.json", "path": "/test/swagger/*any"}
+2021-05-14T15:14:31.926+0800	INFO	web/middleware.go:64	open allow origin
+2021-05-14T15:14:31.926+0800	INFO	web/middleware.go:107	open trace
+2021-05-14T15:14:31.926+0800	INFO	web/middleware.go:81	open rate limit	{"duration": "5s", "capacity": 5}
+2021-05-14T15:15:13.209+0800	INFO	web/middleware.go:44	open prometheus	{"path": "/metrics"}
+2021-05-14T15:15:13.210+0800	INFO	web/middleware.go:59	open swagger	{"url": "http://192.168.1.47:8080/test/swagger/doc.json", "path": "/test/swagger/*any"}
+2021-05-14T15:15:13.210+0800	INFO	web/middleware.go:64	open allow origin
+2021-05-14T15:15:13.210+0800	INFO	web/middleware.go:108	open trace
+2021-05-14T15:15:13.210+0800	INFO	web/middleware.go:81	open rate limit	{"duration": "5s", "capacity": 5}
+2021-05-14T15:19:40.241+0800	INFO	web/middleware.go:44	open prometheus	{"path": "/metrics"}
+2021-05-14T15:19:40.242+0800	INFO	web/middleware.go:59	open swagger	{"url": "http://192.168.1.47:8080/test/swagger/doc.json", "path": "/test/swagger/*any"}
+2021-05-14T15:19:40.242+0800	INFO	web/middleware.go:64	open allow origin
+2021-05-14T15:19:40.242+0800	INFO	web/middleware.go:108	open trace
+2021-05-14T15:19:40.242+0800	INFO	web/middleware.go:81	open rate limit	{"duration": "5s", "capacity": 5}
+2021-05-14T15:20:04.593+0800	INFO	web/middleware.go:44	open prometheus	{"path": "/metrics"}
+2021-05-14T15:20:04.594+0800	INFO	web/middleware.go:59	open swagger	{"url": "http://192.168.1.47:8080/test/swagger/doc.json", "path": "/test/swagger/*any"}
+2021-05-14T15:20:04.594+0800	INFO	web/middleware.go:64	open allow origin
+2021-05-14T15:20:04.594+0800	INFO	web/middleware.go:107	open trace
+2021-05-14T15:20:04.594+0800	INFO	web/middleware.go:81	open rate limit	{"duration": "5s", "capacity": 5}
+2021-05-14T15:20:52.416+0800	INFO	web/middleware.go:44	open prometheus	{"path": "/metrics"}
+2021-05-14T15:20:52.417+0800	INFO	web/middleware.go:59	open swagger	{"url": "http://192.168.1.47:8080/test/swagger/doc.json", "path": "/test/swagger/*any"}
+2021-05-14T15:20:52.417+0800	INFO	web/middleware.go:64	open allow origin
+2021-05-14T15:20:52.417+0800	INFO	web/middleware.go:106	open trace
+2021-05-14T15:20:52.418+0800	INFO	web/middleware.go:81	open rate limit	{"duration": "1s", "capacity": 5}
+2021-05-14T15:25:38.679+0800	INFO	web/middleware.go:44	open prometheus	{"path": "/metrics"}
+2021-05-14T15:25:38.681+0800	INFO	web/middleware.go:59	open swagger	{"url": "http://192.168.1.47:8080/test/swagger/doc.json", "path": "/test/swagger/*any"}
+2021-05-14T15:25:38.681+0800	INFO	web/middleware.go:64	open allow origin
+2021-05-14T15:25:38.681+0800	INFO	web/middleware.go:106	open trace
+2021-05-14T15:25:38.681+0800	INFO	web/middleware.go:81	open rate limit	{"duration": "1s", "capacity": 5}

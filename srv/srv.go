@@ -22,38 +22,38 @@ type Option func(ops *Options)
 // }
 
 // func Startup(name string, starter Starter, opts ...Option) error {
-// 	options := &Options{
-// 		IsLogToES: false,
-// 		IsTrace:   false,
-// 	}
+// options := &Options{
+// 	IsLogToES: false,
+// 	IsTrace:   false,
+// }
 
-// 	for _, opt := range opts {
-// 		opt(options)
-// 	}
+// for _, opt := range opts {
+// 	opt(options)
+// }
 
-// 	if options.IsLogToES {
-// 		log.LogToES(name)
-// 	}
+// if options.IsLogToES {
+// 	log.LogToES(name)
+// }
 
-// 	microOpts := []micro.Option{
-// 		micro.Name(name),
-// 		micro.Version("latest"),
-// 		micro.Registry(etcd.NewRegistry(registry.Addrs(appconfig.MustGet().ETCDAddress))),
-// 		micro.RegisterTTL(time.Second * 30),
-// 		micro.RegisterInterval(time.Second * 15),
-// 		micro.Broker(nats.NewBroker(broker.Addrs(appconfig.MustGet().NatsAddress))),
-// 	}
+// microOpts := []micro.Option{
+// 	micro.Name(name),
+// 	micro.Version("latest"),
+// 	micro.Registry(etcd.NewRegistry(registry.Addrs(appconfig.MustGet().ETCDAddress))),
+// 	micro.RegisterTTL(time.Second * 30),
+// 	micro.RegisterInterval(time.Second * 15),
+// 	micro.Broker(nats.NewBroker(broker.Addrs(appconfig.MustGet().NatsAddress))),
+// }
 
-// 	if options.IsTrace {
-// 		t, closer, err := trace.NewTracer(name, appconfig.MustGet().JaegerAddress)
+// if options.IsTrace {
+// 	t, closer, err := trace.NewTracer(name, appconfig.MustGet().JaegerAddress)
 
-// 		if err != nil {
-// 			return fmt.Errorf("trace error: %w", err)
-// 		}
-// 		defer closer.Close()
-// 		microOpts = append(microOpts, micro.WrapHandler(ocplugin.NewHandlerWrapper(t)))
-// 		logrus.Infoln("open trace")
+// 	if err != nil {
+// 		return fmt.Errorf("trace error: %w", err)
 // 	}
+// 	defer closer.Close()
+// 	microOpts = append(microOpts, micro.WrapHandler(ocplugin.NewHandlerWrapper(t)))
+// 	logrus.Infoln("open trace")
+// }
 
 // 	if options.IsMonitor {
 // 		microOpts = append(microOpts, micro.WrapHandler(prometheus.NewHandlerWrapper()))

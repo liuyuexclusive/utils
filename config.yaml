@@ -1,0 +1,11 @@
+APIPort: "8080"
+ConnStr: host=192.168.1.47 port=5432 password=123456 sslmode=disable user=postgres dbname=future
+ElasticURL: http://192.168.1.47:9200
+ETCDAddress: 192.168.1.47:2379
+HostIP: 192.168.1.47
+JaegerAddress: 192.168.1.47:6831
+NatsAddress: 192.168.1.47:4222
+RedisAddress: 192.168.1.47:6379
+LogPath: "./log"
+LogLevel: "debug"
+Name: "test"
