@@ -9,7 +9,7 @@ import (
 
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
-	"github.com/yuexclusive/utils/log"
+	"github.com/yuexclusive/utils/logger"
 	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
@@ -41,7 +41,7 @@ func Prometheus(engine *gin.Engine) {
 	engine.GET(path, func(c *gin.Context) {
 		p.Handler().ServeHTTP(c.Writer, c.Request)
 	})
-	log.Logger.Info("open prometheus", zap.String("path", path))
+	logger.Logger.Info("open prometheus", zap.String("path", path))
 }
 
 // Swagger
@@ -56,12 +56,12 @@ func Swagger(engine *gin.Engine) {
 	}
 	engine.GET(path, ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL(url)))
 
-	log.Logger.Info("open swagger", zap.String("url", url), zap.String("path", path))
+	logger.Logger.Info("open swagger", zap.String("url", url), zap.String("path", path))
 }
 
 // AllowOrigin
 func AllowOrigin() gin.HandlerFunc {
-	log.Logger.Info("open allow origin")
+	logger.Logger.Info("open allow origin")
 	return func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, AccessToken,X-CSRF-Token, Authorization, Token")
@@ -78,7 +78,7 @@ func AllowOrigin() gin.HandlerFunc {
 // RateLimite
 func RateLimite(duration time.Duration, capacity int64) gin.HandlerFunc {
 	bucket := ratelimit.NewBucket(duration, capacity)
-	log.Logger.Info("open rate limit", zap.String("duration", duration.String()), zap.Int64("capacity", capacity))
+	logger.Logger.Info("open rate limit", zap.String("duration", duration.String()), zap.Int64("capacity", capacity))
 	return func(c *gin.Context) {
 		available := bucket.TakeAvailable(1)
 		if available <= 0 {
@@ -103,7 +103,7 @@ func contextWithSpan(c *gin.Context) (ctx context.Context) {
 
 // Tracer
 func Tracer() gin.HandlerFunc {
-	log.Logger.Info("open trace")
+	logger.Logger.Info("open trace")
 
 	return func(c *gin.Context) {
 		md := make(map[string]string)
@@ -114,7 +114,7 @@ func Tracer() gin.HandlerFunc {
 		if err := opentracing.GlobalTracer().Inject(sp.Context(),
 			opentracing.TextMap,
 			opentracing.TextMapCarrier(md)); err != nil {
-			log.Logger.Fatal(err.Error())
+			logger.Logger.Fatal(err.Error())
 		}
 
 		ctx := context.TODO()
