@@ -1,4 +1,4 @@
-package log
+package logger
 
 import (
 	"fmt"
@@ -11,23 +11,6 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
-
-// // LogToES logrus to elastic
-// func LogrusToES(index string) error {
-// 	client, err := es.Client()
-// 	if err != nil {
-// 		logrus.Error(err)
-// 		return err
-// 	}
-// 	hook, err := elogrus.NewElasticHook(client, config.MustGet().ElasticURL, logrus.InfoLevel, index)
-// 	if err != nil {
-// 		return fmt.Errorf("fail of log to elastic : %w", err)
-// 	}
-// 	logrus.AddHook(hook)
-// 	gin.DefaultWriter = logrus.StandardLogger().Writer()
-// 	logrus.Info("seccessfully of log to elastic")
-// 	return nil
-// }
 
 var Sugar *zap.SugaredLogger
 

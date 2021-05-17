@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	_ "github.com/yuexclusive/utils/docs"
-	"github.com/yuexclusive/utils/log"
+	"github.com/yuexclusive/utils/logger"
 	"github.com/yuexclusive/utils/web"
 )
 
@@ -27,7 +27,7 @@ func Hello(c *gin.Context) {
 }
 
 func main() {
-	log.Init()
+	logger.Init()
 	engine := gin.Default()
 
 	web.Prometheus(engine)
