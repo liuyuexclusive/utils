@@ -16,6 +16,7 @@ require (
 	github.com/go-redis/redis v6.15.8+incompatible
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/uuid v1.1.2 // indirect
 	github.com/gorilla/websocket v1.4.2
 	github.com/jinzhu/gorm v1.9.12
 	github.com/json-iterator/go v1.1.11 // indirect
@@ -46,6 +47,7 @@ require (
 	github.com/ugorji/go v1.2.5 // indirect
 	go.elastic.co/ecszap v1.0.0
 	go.etcd.io/etcd v3.3.22+incompatible
+	go.etcd.io/etcd/api/v3 v3.5.0-alpha.0 // indirect
 	go.etcd.io/etcd/client/v3 v3.5.0-alpha.0
 	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/zap v1.16.0
@@ -57,3 +59,5 @@ require (
 	gopkg.in/sohlich/elogrus.v7 v7.0.0
 	gopkg.in/yaml.v2 v2.4.0
 )
+
+replace google.golang.org/grpc => google.golang.org/grpc v1.37.0
