@@ -7,17 +7,28 @@ import (
 )
 
 type Config struct {
-	Name          string `yaml:"Name"`
-	ETCDAddress   string `yaml:"ETCDAddress"`
-	NatsAddress   string `yaml:"NatsAddress"`
-	HostIP        string `yaml:"HostIP"`
-	APIPort       string `yaml:"APIPort"`
-	ElasticURL    string `yaml:"ElasticURL"`
-	ConnStr       string `yaml:"ConnStr"`
-	RedisAddress  string `yaml:"RedisAddress"`
-	JaegerAddress string `yaml:"JaegerAddress"`
-	LogPath       string `yaml:"LogPath"`
-	LogLevel      string `yaml:"LogLevel"`
+	IP          string
+	Port        string
+	Address     string
+	Name        string
+	ETCDAddress []string
+	NatsAddress string
+
+	ElasticURL      string
+	ConnStr         string
+	RedisAddress    string
+	JaegerAddress   string
+	LogPath         string
+	LogLevel        string
+	TLS             ConfigTLS
+	AuthServiceName string
+}
+
+type ConfigTLS struct {
+	CertFile           string
+	KeyFile            string
+	CACertFile         string
+	ServerNameOverride string
 }
 
 func MustGet() *Config {

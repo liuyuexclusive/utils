@@ -1,8 +1,8 @@
-drop database if exists future;
+drop database if exists evolve;
 
-create database future;
+create database evolve;
 
-\c future;
+\c evolve;
 
 drop table if exists role;
 create table role (

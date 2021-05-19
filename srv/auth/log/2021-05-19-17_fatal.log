@@ -1,0 +1,1 @@
+2021-05-19T17:04:21.813+0800	FATAL	auth/main.go:19	open ./../ssl/server_cert.pem: no such file or directory

@@ -3,6 +3,7 @@ package rpc
 import (
 	"fmt"
 
+	"github.com/yuexclusive/utils/config"
 	"github.com/yuexclusive/utils/registry"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
@@ -22,6 +23,7 @@ type dialOption struct {
 	endpoints          []string
 	certFile           string
 	serverNameOverride string
+	token              string
 }
 
 type discoveryDialOption struct {
@@ -63,14 +65,16 @@ func TLSClient(certFile, serverNameOverride string) DialOption {
 }
 
 type authClientDialOption struct {
+	token string
 }
 
 func (r *authClientDialOption) apply(s *dialOption) {
 	s.auth = true
+	s.token = r.token
 }
 
-func AuthClient() DialOption {
-	return &authClientDialOption{}
+func AuthClient(token string) DialOption {
+	return &authClientDialOption{token: token}
 }
 
 func Dial(dialOptions ...DialOption) (*grpc.ClientConn, error) {
@@ -83,7 +87,7 @@ func Dial(dialOptions ...DialOption) (*grpc.ClientConn, error) {
 	var opts []grpc.DialOption
 
 	if option.auth {
-		perRPC := oauth.NewOauthAccess(fetchToken())
+		perRPC := oauth.NewOauthAccess(fetchToken(option.token))
 		opts = append(opts, grpc.WithPerRPCCredentials(perRPC))
 	}
 
@@ -107,8 +111,25 @@ func Dial(dialOptions ...DialOption) (*grpc.ClientConn, error) {
 	return grpc.Dial(address, opts...)
 }
 
-func fetchToken() *oauth2.Token {
+func DialByName(name string) (*grpc.ClientConn, error) {
+	cfg := config.MustGet()
+	return Dial(
+		Discovery(name, []string{name}, cfg.ETCDAddress),
+		TLSClient(cfg.TLS.CACertFile, cfg.TLS.ServerNameOverride),
+	)
+}
+
+func DialByNameWithAuth(name, token string) (*grpc.ClientConn, error) {
+	cfg := config.MustGet()
+	return Dial(
+		Discovery(name, []string{name}, cfg.ETCDAddress),
+		TLSClient(cfg.TLS.CACertFile, cfg.TLS.ServerNameOverride),
+		AuthClient(token),
+	)
+}
+
+func fetchToken(token string) *oauth2.Token {
 	return &oauth2.Token{
-		AccessToken: "some-secret-token",
+		AccessToken: token,
 	}
 }

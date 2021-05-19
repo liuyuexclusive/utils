@@ -33,6 +33,7 @@ require (
 	github.com/miekg/dns v1.1.29 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/natefinch/lumberjack v2.0.0+incompatible
+	github.com/nats-io/nats.go v1.11.0 // indirect
 	github.com/olivere/elastic/v7 v7.0.16
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/prometheus/client_golang v1.6.0

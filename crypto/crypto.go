@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/cipher"
 	"crypto/des"
+	"crypto/sha256"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -132,4 +133,10 @@ func DecryptDES_ECB(src, key string) (string, error) {
 	}
 	out = pKCS5UnPadding(out)
 	return string(out), nil
+}
+
+func Sha256(s string) string {
+	h := sha256.New()
+	h.Write([]byte(s))
+	return hex.EncodeToString(h.Sum(nil))
 }

@@ -4,32 +4,18 @@ import (
 	"github.com/yuexclusive/utils/config"
 
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres" //使用mysql数据库
-	"github.com/sirupsen/logrus"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-type DB struct {
-	*gorm.DB
-}
-
-func Open(f func(*DB) error) error {
-	defer func() {
-		if r := recover(); r != nil {
-			logrus.Error(r)
-		}
-	}()
-
+func Open() (*gorm.DB, error) {
 	cfg := config.MustGet()
 
 	gdb, err := gorm.Open("postgres", cfg.ConnStr)
+	if err != nil {
+		return nil, err
+	}
 
-	defer gdb.Close()
 	gdb.LogMode(true)
 	gdb.SingularTable(true)
-	err = f(&DB{gdb})
-	if err != nil {
-		logrus.Error(err)
-		return err
-	}
-	return nil
+	return gdb, nil
 }

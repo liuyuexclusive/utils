@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"testing"
+	"time"
 )
 
 const (
@@ -16,6 +17,8 @@ func TestJwt(t *testing.T) {
 	}
 
 	t.Log(token)
+
+	time.Sleep(time.Second * 10)
 
 	claims, err := GetClaims(token, testKey)
 

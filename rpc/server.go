@@ -3,10 +3,13 @@ package rpc
 import (
 	"context"
 	"crypto/tls"
+	"errors"
 	"net"
 	"strings"
 
+	"github.com/yuexclusive/utils/config"
 	"github.com/yuexclusive/utils/registry"
+	"github.com/yuexclusive/utils/srv/auth/proto/auth"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
@@ -151,23 +154,41 @@ func ensureValidToken(ctx context.Context, req interface{}, info *grpc.UnaryServ
 	if !ok {
 		return nil, errMissingMetadata
 	}
+
 	// The keys within metadata.MD are normalized to lowercase.
 	// See: https://godoc.org/google.golang.org/grpc/metadata#New
-	if !validToken(md["authorization"]) {
-		return nil, errInvalidToken
+	if err := validToken(md["authorization"]); err != nil {
+		return nil, err
 	}
 	// Continue execution of handler after ensuring a valid token.
 	return handler(ctx, req)
 }
 
 // validToken validates the authorization.
-func validToken(authorization []string) bool {
+func validToken(authorization []string) error {
 	if len(authorization) < 1 {
-		return false
+		return errors.New("please pass a authorization")
 	}
 	token := strings.TrimPrefix(authorization[0], "Bearer ")
-	// Perform the token validation here. For the sake of this example, the code
-	// here forgoes any of the usual OAuth2 token validation and instead checks
-	// for a token matching an arbitrary string.
-	return token == "some-secret-token"
+
+	//validate through the auth server
+
+	cfg := config.MustGet()
+
+	client, err := Dial(
+		Discovery(cfg.AuthServiceName, []string{cfg.AuthServiceName}, cfg.ETCDAddress),
+		TLSClient(cfg.TLS.CACertFile, cfg.TLS.ServerNameOverride),
+	)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = auth.NewAuthClient(client).Validate(context.Background(), &auth.ValidateRequest{Token: token})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

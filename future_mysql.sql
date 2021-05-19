@@ -1,7 +1,7 @@
--- drop DATABASE future
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`future` /*!40100 DEFAULT CHARACTER SET utf8 */;
+-- drop DATABASE evolve
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`evolve` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
-USE future;
+USE evolve;
 SET time_zone='+8:00';
 FLUSH PRIVILEGES;
 #SHOW VARIABLES LIKE '%zone%';
