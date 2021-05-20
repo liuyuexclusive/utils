@@ -20,7 +20,7 @@ type Discovery struct {
 }
 
 //NewDiscovery
-func NewDiscovery(endpoints []string, names []string) *Discovery {
+func NewDiscovery(endpoints []string, name string) *Discovery {
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:   endpoints,
 		DialTimeout: 5 * time.Second,
@@ -30,14 +30,11 @@ func NewDiscovery(endpoints []string, names []string) *Discovery {
 	}
 
 	d := &Discovery{
-		cli:   cli,
-		data:  make(map[string]map[string]string),
-		names: names,
+		cli:  cli,
+		data: make(map[string]map[string]string),
 	}
 
-	for _, name := range names {
-		d.watch(name)
-	}
+	d.watch(name)
 
 	return d
 }

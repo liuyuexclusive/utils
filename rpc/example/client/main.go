@@ -9,6 +9,8 @@ import (
 	"github.com/yuexclusive/utils/rpc"
 	"github.com/yuexclusive/utils/srv/auth/proto/auth"
 	"github.com/yuexclusive/utils/srv/basic/proto/user"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/encoding/gzip"
 )
 
 func main() {
@@ -36,7 +38,7 @@ func main() {
 	}
 
 	client := user.NewUserClient(conn2)
-	res, err := client.Get(context.Background(), &user.GetRequest{Name: "super_admin"})
+	res, err := client.Get(context.Background(), &user.GetRequest{Name: "super_admin"}, grpc.UseCompressor(gzip.Name))
 	if err != nil {
 		log.Fatal(err)
 	}

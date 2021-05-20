@@ -13,6 +13,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
+	_ "google.golang.org/grpc/encoding/gzip"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
@@ -110,6 +111,7 @@ func NewServer(serverOptions ...ServerOption) (*Server, error) {
 
 	if option.auth {
 		grpcServerOptions = append(grpcServerOptions, grpc.UnaryInterceptor(ensureValidToken))
+		grpcServerOptions = append(grpcServerOptions, grpc.StreamInterceptor(streamEnsureValidToken))
 	}
 
 	server := grpc.NewServer(
@@ -176,7 +178,7 @@ func validToken(authorization []string) error {
 	cfg := config.MustGet()
 
 	client, err := Dial(
-		Discovery(cfg.AuthServiceName, []string{cfg.AuthServiceName}, cfg.ETCDAddress),
+		Discovery(cfg.AuthServiceName, cfg.ETCDAddress),
 		TLSClient(cfg.TLS.CACertFile, cfg.TLS.ServerNameOverride),
 	)
 
@@ -191,4 +193,35 @@ func validToken(authorization []string) error {
 	}
 
 	return nil
+}
+
+// wrappedStream wraps around the embedded grpc.ServerStream, and intercepts the RecvMsg and
+// SendMsg method call.
+type wrappedStream struct {
+	grpc.ServerStream
+}
+
+func (w *wrappedStream) RecvMsg(m interface{}) error {
+	return w.ServerStream.RecvMsg(m)
+}
+
+func (w *wrappedStream) SendMsg(m interface{}) error {
+	return w.ServerStream.SendMsg(m)
+}
+
+func newWrappedStream(s grpc.ServerStream) grpc.ServerStream {
+	return &wrappedStream{s}
+}
+
+func streamEnsureValidToken(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
+	// authentication (token verification)
+	md, ok := metadata.FromIncomingContext(ss.Context())
+	if !ok {
+		return errMissingMetadata
+	}
+	if err := validToken(md["authorization"]); err != nil {
+		return err
+	}
+
+	return handler(srv, newWrappedStream(ss))
 }

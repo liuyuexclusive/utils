@@ -18,7 +18,6 @@ type DialOption interface {
 type dialOption struct {
 	auth               bool
 	tls                bool
-	names              []string
 	name               string
 	endpoints          []string
 	certFile           string
@@ -27,7 +26,6 @@ type dialOption struct {
 }
 
 type discoveryDialOption struct {
-	names     []string
 	name      string
 	endpoints []string
 }
@@ -35,13 +33,11 @@ type discoveryDialOption struct {
 func (r *discoveryDialOption) apply(s *dialOption) {
 	s.endpoints = r.endpoints
 	s.name = r.name
-	s.names = r.names
 }
 
-func Discovery(name string, names []string, endpoints []string) DialOption {
+func Discovery(name string, endpoints []string) DialOption {
 	return &discoveryDialOption{
 		name:      name,
-		names:     names,
 		endpoints: endpoints,
 	}
 }
@@ -101,7 +97,7 @@ func Dial(dialOptions ...DialOption) (*grpc.ClientConn, error) {
 
 	opts = append(opts, grpc.WithBlock())
 
-	dis := registry.NewDiscovery(option.endpoints, option.names)
+	dis := registry.NewDiscovery(option.endpoints, option.name)
 
 	address, err := dis.Get(option.name)
 	if err != nil {
@@ -114,7 +110,7 @@ func Dial(dialOptions ...DialOption) (*grpc.ClientConn, error) {
 func DialByName(name string) (*grpc.ClientConn, error) {
 	cfg := config.MustGet()
 	return Dial(
-		Discovery(name, []string{name}, cfg.ETCDAddress),
+		Discovery(name, cfg.ETCDAddress),
 		TLSClient(cfg.TLS.CACertFile, cfg.TLS.ServerNameOverride),
 	)
 }
@@ -122,7 +118,7 @@ func DialByName(name string) (*grpc.ClientConn, error) {
 func DialByNameWithAuth(name, token string) (*grpc.ClientConn, error) {
 	cfg := config.MustGet()
 	return Dial(
-		Discovery(name, []string{name}, cfg.ETCDAddress),
+		Discovery(name, cfg.ETCDAddress),
 		TLSClient(cfg.TLS.CACertFile, cfg.TLS.ServerNameOverride),
 		AuthClient(token),
 	)
