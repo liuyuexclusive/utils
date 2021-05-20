@@ -10,7 +10,7 @@ import (
 
 func Client() (*etcd.Client, error) {
 	config := etcd.Config{
-		Endpoints:   []string{config.MustGet().ETCDAddress},
+		Endpoints:   config.MustGet().ETCDAddress,
 		DialTimeout: 10 * time.Second,
 	}
 	return etcd.New(config)

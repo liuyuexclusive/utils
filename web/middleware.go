@@ -48,10 +48,10 @@ func Prometheus(engine *gin.Engine) {
 func Swagger(engine *gin.Engine) {
 	var url, path string
 	if name := config.MustGet().Name; name == "" {
-		url = fmt.Sprintf("http://%s:%s/swagger/doc.json", config.MustGet().HostIP, config.MustGet().APIPort)
+		url = fmt.Sprintf("http://%s:%s/swagger/doc.json", config.MustGet().IP, config.MustGet().Port)
 		path = "/swagger/*any"
 	} else {
-		url = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", config.MustGet().HostIP, config.MustGet().APIPort, config.MustGet().Name) // The url pointing to API definition
+		url = fmt.Sprintf("http://%s:%s/%s/swagger/doc.json", config.MustGet().IP, config.MustGet().Port, config.MustGet().Name) // The url pointing to API definition
 		path = fmt.Sprintf("/%s/swagger/*any", name)
 	}
 	engine.GET(path, ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL(url)))
