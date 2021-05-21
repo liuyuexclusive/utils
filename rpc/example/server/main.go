@@ -5,7 +5,14 @@ import (
 	"fmt"
 	"log"
 
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
+	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
+	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	"github.com/yuexclusive/utils/logger"
 	"github.com/yuexclusive/utils/rpc/example/proto/hello"
+	"github.com/yuexclusive/utils/rpc/middleware/auth"
+	"google.golang.org/grpc"
 
 	"github.com/yuexclusive/utils/rpc"
 )
@@ -21,11 +28,16 @@ func (h *handler) Send(ctx context.Context, req *hello.Request) (*hello.Response
 
 func main() {
 	server, err := rpc.NewServer(
-		rpc.Registry("test.srv.hello", []string{"localhost:2379"}, "", 5),
-		rpc.TLS("../../../ssl/server_cert.pem", "../../../ssl/server_key.pem"),
-		rpc.Auth(),
+		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
+			grpc_auth.StreamServerInterceptor(auth.AuthFunc),
+			grpc_zap.StreamServerInterceptor(logger.Logger),
+		)),
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_auth.UnaryServerInterceptor(auth.AuthFunc),
+			grpc_zap.UnaryServerInterceptor(logger.Logger),
+			grpc_recovery.UnaryServerInterceptor(),
+		)),
 	)
-
 	if err != nil {
 		log.Fatal(err)
 	}

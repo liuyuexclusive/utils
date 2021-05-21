@@ -11,6 +11,7 @@ type Config struct {
 	Port        string
 	Address     string
 	Name        string
+	Lease       int64
 	ETCDAddress []string
 	NatsAddress string
 

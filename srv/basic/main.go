@@ -1,10 +1,17 @@
 package main
 
 import (
-	"github.com/yuexclusive/utils/config"
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	"github.com/yuexclusive/utils/logger"
 	"github.com/yuexclusive/utils/rpc"
+	"github.com/yuexclusive/utils/rpc/middleware/auth"
+	"google.golang.org/grpc"
 
+	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
+	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
+	"github.com/yuexclusive/utils/rpc/middleware/trace"
 	"github.com/yuexclusive/utils/srv/basic/handler/role_handler"
 	"github.com/yuexclusive/utils/srv/basic/handler/user_handler"
 	"github.com/yuexclusive/utils/srv/basic/proto/role"
@@ -12,11 +19,25 @@ import (
 )
 
 func main() {
-	cfg := config.MustGet()
+	tracer, closer, err := trace.Tracer()
+
+	if err != nil {
+		logger.Sugar.Fatal(err)
+	}
+
+	defer closer.Close()
+
 	s, err := rpc.NewServer(
-		rpc.Registry(cfg.Name, config.MustGet().ETCDAddress, cfg.Address, 5),
-		rpc.TLS(cfg.TLS.CertFile, cfg.TLS.KeyFile),
-		rpc.Auth(),
+		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
+			grpc_auth.StreamServerInterceptor(auth.AuthFunc),
+			grpc_zap.StreamServerInterceptor(logger.Logger),
+		)),
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_auth.UnaryServerInterceptor(auth.AuthFunc),
+			grpc_zap.UnaryServerInterceptor(logger.Logger),
+			grpc_recovery.UnaryServerInterceptor(),
+			grpc_opentracing.UnaryServerInterceptor(grpc_opentracing.WithTracer(tracer)),
+		)),
 	)
 
 	if err != nil {

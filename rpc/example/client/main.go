@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/yuexclusive/utils/config"
-	"github.com/yuexclusive/utils/rpc"
+	"github.com/yuexclusive/utils/rpc/client"
 	"github.com/yuexclusive/utils/srv/auth/proto/auth"
 	"github.com/yuexclusive/utils/srv/basic/proto/user"
 	"google.golang.org/grpc"
@@ -16,7 +16,9 @@ import (
 func main() {
 	cfg := config.MustGet()
 
-	conn, err := rpc.DialByName(cfg.AuthServiceName)
+	closer, conn, err := client.Dial(cfg.AuthServiceName, "")
+
+	defer closer.Close()
 
 	if err != nil {
 		log.Fatal(err)
@@ -31,7 +33,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	conn2, err := rpc.DialByNameWithAuth("srv.basic", r1.Token)
+	closer, conn2, err := client.Dial("srv.basic", r1.Token)
+
+	defer closer.Close()
 
 	if err != nil {
 		log.Fatal(err)
