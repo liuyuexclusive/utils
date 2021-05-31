@@ -8,7 +8,7 @@ services:
       - 5432:5432
     volumes:
       - $HOME/docker_volumes/postgres:/var/lib/postgresql/data
-      - $HOME/future_postgres.sql:/docker-entrypoint-initdb.d/future_postgres.sql
+      - /Users/liuyu/golang/utils/future_postgres.sql:/docker-entrypoint-initdb.d/future_postgres.sql
 
   # mysql:
   #   image: mysql:latest
@@ -141,6 +141,22 @@ services:
   #   depends_on:
   #     - elasticsearch
 
+  # docker run -d -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778  -p 16686:16686 -p 14268:14268  -p 14269:14269   -p 9411:9411 jaegertracing/all-in-one:latest
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "14269:14269"
+      - "9411:9411"
+
+
   # jaeger-agent:
   #   image: jaegertracing/jaeger-agent
   #   restart: always
@@ -168,19 +184,19 @@ services:
   #   depends_on:
   #     - elasticsearch
 
-  # prometheus:
-  #   image: prom/prometheus
-  #   ports: 
-  #     - 9090:9090
-  #   volumes:
-  #     - $HOME/docker_volumes/prometheus.yml:/etc/prometheus/prometheus.yml
+  prometheus:
+    image: prom/prometheus
+    ports: 
+      - 9090:9090
+    volumes:
+      - $HOME/docker_volumes/prometheus.yml:/etc/prometheus/prometheus.yml
 
-  # grafana:
-  #   image: grafana/grafana
-  #   ports:
-  #     - 3000:3000
-  #   depends_on: 
-  #     - prometheus
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    depends_on: 
+      - prometheus
 
   # gogs:
   #   image: gogs/gogs
@@ -245,3 +261,7 @@ services:
 #   default:
 #     external:
 #       name: future_default
+
+
+
+

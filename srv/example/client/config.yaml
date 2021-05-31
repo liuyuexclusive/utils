@@ -1,4 +1,4 @@
-Name: "srv.auth"
+Name: "srv.testClient"
 Lease: 5
 IP: 192.168.199.246
 Port: "8080"

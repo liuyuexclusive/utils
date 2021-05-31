@@ -38,6 +38,8 @@ func Dial(name string, token string, dialOptions ...grpc.DialOption) (io.Closer,
 
 	// defer closer.Close()
 
+	// opts = append(opts, grpc.WithUnaryInterceptor(grpc_prometheus.UnaryClientInterceptor))
+
 	opts = append(opts, grpc.WithUnaryInterceptor(grpc_opentracing.UnaryClientInterceptor(
 		grpc_opentracing.WithTracer(tracer),
 	)))

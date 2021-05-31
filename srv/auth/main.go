@@ -2,6 +2,7 @@ package main
 
 import (
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	"github.com/yuexclusive/utils/logger"
 	"github.com/yuexclusive/utils/rpc"
@@ -22,6 +23,7 @@ func main() {
 
 	s, err := rpc.NewServer(
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_zap.UnaryServerInterceptor(logger.Logger),
 			grpc_opentracing.UnaryServerInterceptor(grpc_opentracing.WithTracer(tracer)),
 		)),
 	)

@@ -1,8 +1,11 @@
 package main
 
 import (
+	"net/http"
+
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/yuexclusive/utils/logger"
 	"github.com/yuexclusive/utils/rpc"
 	"github.com/yuexclusive/utils/rpc/middleware/auth"
@@ -11,6 +14,7 @@ import (
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
+	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/yuexclusive/utils/rpc/middleware/trace"
 	"github.com/yuexclusive/utils/srv/basic/handler/role_handler"
 	"github.com/yuexclusive/utils/srv/basic/handler/user_handler"
@@ -37,6 +41,7 @@ func main() {
 			grpc_zap.UnaryServerInterceptor(logger.Logger),
 			grpc_recovery.UnaryServerInterceptor(),
 			grpc_opentracing.UnaryServerInterceptor(grpc_opentracing.WithTracer(tracer)),
+			grpc_prometheus.UnaryServerInterceptor,
 		)),
 	)
 
@@ -46,6 +51,12 @@ func main() {
 
 	role.RegisterRoleServer(s.Server, new(role_handler.Handler))
 	user.RegisterUserServer(s.Server, new(user_handler.Handler))
+
+	grpc_prometheus.Register(s.Server)
+
+	go func() {
+		http.Handle("/metrics", promhttp.Handler())
+	}()
 
 	logger.Sugar.Fatal(s.Serve())
 }

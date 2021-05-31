@@ -1,0 +1,2 @@
+2021-05-31T10:19:01.981+0800	INFO	zap/server_interceptors.go:40	finished unary call with code OK	{"grpc.start_time": "2021-05-31T10:19:01+08:00", "system": "grpc", "span.kind": "server", "grpc.service": "user.User", "grpc.method": "Get", "grpc.code": "OK", "grpc.time_ms": 24}
+2021-05-31T10:28:03.356+0800	INFO	zap/server_interceptors.go:40	finished unary call with code OK	{"grpc.start_time": "2021-05-31T10:28:03+08:00", "system": "grpc", "span.kind": "server", "grpc.service": "user.User", "grpc.method": "Get", "grpc.code": "OK", "grpc.time_ms": 51.40999984741211}

@@ -14,6 +14,7 @@ import (
 )
 
 func main() {
+
 	cfg := config.MustGet()
 
 	closer, conn, err := client.Dial(cfg.AuthServiceName, "")
