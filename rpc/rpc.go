@@ -18,7 +18,7 @@ func NewServer(serverOptions ...grpc.ServerOption) (*Server, error) {
 	t, err := tls.Option()
 	if err != nil {
 		return nil, err
-	}
+	}	
 	serverOptions = append(serverOptions, t)
 
 	server := grpc.NewServer(

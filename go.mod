@@ -52,6 +52,7 @@ require (
 	go.etcd.io/etcd v3.3.22+incompatible
 	go.etcd.io/etcd/api/v3 v3.5.0-alpha.0
 	go.etcd.io/etcd/client/v3 v3.5.0-alpha.0
+	go.mongodb.org/mongo-driver v1.5.4
 	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect

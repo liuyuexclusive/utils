@@ -62,18 +62,28 @@ func connect(c *Config) (*mongo.Client, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), DefaultConnectTimeout*time.Second)
 	defer cancel()
+
+	opts := []*options.ClientOptions{
+		options.Client().ApplyURI(c.Addr),
+		options.Client().SetConnectTimeout(DefaultConnectTimeout * time.Second),
+	}
+
+	if c.Auth != nil {
+		opts = append(opts,
+			options.Client().SetAuth(options.Credential{
+				AuthMechanism: "SCRAM-SHA-1",
+				AuthSource:    c.Auth.AuthSource,
+				Username:      c.Auth.Username,
+				Password:      c.Auth.Password,
+				PasswordSet:   c.Auth.PasswordSet,
+			}),
+		)
+	}
+
 	client, err := mongo.Connect(
 		ctx,
-		// options.Client().ApplyURI(c.Addr).SetMonitor(monitor),
-		options.Client().SetConnectTimeout(DefaultConnectTimeout*time.Second),
-		options.Client().SetAuth(options.Credential{
-			AuthMechanism: "SCRAM-SHA-1",
-			AuthSource:    c.Auth.AuthSource,
-			Username:      c.Auth.Username,
-			Password:      c.Auth.Password,
-			PasswordSet:   c.Auth.PasswordSet,
-		}),
-		// options.Client().SetAppName(c.AppName),
+		opts...,
+	// options.Client().SetAppName(c.AppName),
 	)
 
 	if err != nil {

@@ -13,6 +13,6 @@ type Config struct {
 	AppName    string
 	ClientName ClientName
 	Addr       string
-	Auth       Auth
+	Auth       *Auth
 	Trace      bool
 }

@@ -1,14 +1,14 @@
 version: "3"
 services:  
-  postgres:
-    image: postgres
-    environment: 
-      - POSTGRES_PASSWORD=123456
-    ports:
-      - 5432:5432
-    volumes:
-      - $HOME/docker_volumes/postgres:/var/lib/postgresql/data
-      - /Users/liuyu/golang/utils/future_postgres.sql:/docker-entrypoint-initdb.d/future_postgres.sql
+  # postgres:
+  #   image: postgres
+  #   environment: 
+  #     - POSTGRES_PASSWORD=123456
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - $HOME/docker_volumes/postgres:/var/lib/postgresql/data
+  #     - /Users/liuyu/golang/utils/future_postgres.sql:/docker-entrypoint-initdb.d/future_postgres.sql
 
   # mysql:
   #   image: mysql:latest
@@ -20,7 +20,7 @@ services:
   #     - MYSQL_ROOT_PASSWORD=123456
   #   volumes:
   #     - $HOME/docker_volumes/mysql:/var/lib/mysql
-  #     - $HOME/future.sql:/docker-entrypoint-initdb.d/future.sql
+  #     - /Users/liuyu/golang/utils/future_mysql.sql:/docker-entrypoint-initdb.d/future.sql
 
   # redis:
   #   image: redis
@@ -63,20 +63,44 @@ services:
   #   volumes:
   #     - /data/cluster/db3:/data/db
 
-  etcd:
-    image: 'bitnami/etcd:latest'
-    environment:
-      - ALLOW_NONE_AUTHENTICATION=yes
-      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
-    ports:
-      - 2379:2379
-      - 2380:2380
+  # etcd:
+  #   image: 'bitnami/etcd:latest'
+  #   environment:
+  #     - ALLOW_NONE_AUTHENTICATION=yes
+  #     - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+  #   ports:
+  #     - 2379:2379
+  #     - 2380:2380
       
   # nats: 
   #   image: nats
   #   ports:
   #     - 4222:4222
-  #     - 8222:8222     
+  #     - 8222:8222   
+  
+  zookeeper:
+    image: zookeeper
+    restart: unless-stopped
+    ports:
+      - "2181:2181"
+    volumes:
+      - /usr/local/zookeeper/data:/data
+      - /usr/local/zookeeper/log:/datalog
+    container_name: zookeeper
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: "172.254.0.99"
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LOG_DIRS: "/kafka/kafka-logs-1"
+    volumes:
+      - /usr/local/kafka/logs:/kafka/kafka-logs-1
+    depends_on:
+      - zookeeper
+    container_name: kafka
 
   # micro-api:
   #   image: micro/micro
@@ -142,19 +166,19 @@ services:
   #     - elasticsearch
 
   # docker run -d -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778  -p 16686:16686 -p 14268:14268  -p 14269:14269   -p 9411:9411 jaegertracing/all-in-one:latest
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    environment:
-      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
-    ports:
-      - "5775:5775/udp"
-      - "6831:6831/udp"
-      - "6832:6832/udp"
-      - "5778:5778"
-      - "16686:16686"
-      - "14268:14268"
-      - "14269:14269"
-      - "9411:9411"
+  # jaeger:
+  #   image: jaegertracing/all-in-one:latest
+  #   environment:
+  #     - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+  #   ports:
+  #     - "5775:5775/udp"
+  #     - "6831:6831/udp"
+  #     - "6832:6832/udp"
+  #     - "5778:5778"
+  #     - "16686:16686"
+  #     - "14268:14268"
+  #     - "14269:14269"
+  #     - "9411:9411"
 
 
   # jaeger-agent:
@@ -184,19 +208,19 @@ services:
   #   depends_on:
   #     - elasticsearch
 
-  prometheus:
-    image: prom/prometheus
-    ports: 
-      - 9090:9090
-    volumes:
-      - $HOME/docker_volumes/prometheus.yml:/etc/prometheus/prometheus.yml
+  # prometheus:
+  #   image: prom/prometheus
+  #   ports: 
+  #     - 9090:9090
+  #   volumes:
+  #     - $HOME/docker_volumes/prometheus.yml:/etc/prometheus/prometheus.yml
 
-  grafana:
-    image: grafana/grafana
-    ports:
-      - 3000:3000
-    depends_on: 
-      - prometheus
+  # grafana:
+  #   image: grafana/grafana
+  #   ports:
+  #     - 3000:3000
+  #   depends_on: 
+  #     - prometheus
 
   # gogs:
   #   image: gogs/gogs
