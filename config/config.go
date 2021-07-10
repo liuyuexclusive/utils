@@ -23,6 +23,7 @@ type Config struct {
 	LogLevel        string
 	TLS             ConfigTLS
 	AuthServiceName string
+	MongoAddress    string
 }
 
 type ConfigTLS struct {
