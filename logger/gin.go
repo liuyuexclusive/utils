@@ -14,8 +14,9 @@ import (
 )
 
 func GinWithZap(engine *gin.Engine) {
-	engine.Use(logWithZap(Logger, time.RFC3339, true))
-	engine.Use(recoveryWithZap(Logger, true))
+	l := Single()
+	engine.Use(logWithZap(l, time.RFC3339, true))
+	engine.Use(recoveryWithZap(l, true))
 }
 
 // Ginzap returns a gin.HandlerFunc (middleware) that logs requests using uber-go/zap.

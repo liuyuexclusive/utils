@@ -12,27 +12,31 @@ import (
 	"google.golang.org/grpc"
 )
 
+var l = logger.Single()
+
+var sugar = l.Sugar()
+
 func main() {
 	tracer, closer, err := trace.Tracer()
 
 	if err != nil {
-		logger.Sugar.Fatal(err)
+		sugar.Fatal(err)
 	}
 
 	defer closer.Close()
 
 	s, err := rpc.NewServer(
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
-			grpc_zap.UnaryServerInterceptor(logger.Logger),
+			grpc_zap.UnaryServerInterceptor(l),
 			grpc_opentracing.UnaryServerInterceptor(grpc_opentracing.WithTracer(tracer)),
 		)),
 	)
 
 	if err != nil {
-		logger.Sugar.Fatal(err)
+		sugar.Fatal(err)
 	}
 
 	auth.RegisterAuthServer(s.Server, new(handler.Handler))
 
-	logger.Sugar.Fatal(s.Serve())
+	sugar.Fatal(s.Serve())
 }

@@ -16,13 +16,7 @@ var clientMapLock sync.Mutex
 var clientMap = make(map[ClientName]*mongo.Client)
 var configMap = make(map[ClientName]*Config)
 
-var log = logger.Sugar
-
-// init 无限循环，检查redis客服端是否断开连接，如果断开重新连接
-func init() {
-	// 默认开启连接状态监控
-	go monitoring()
-}
+var log = logger.Single().Sugar()
 
 // Client 根据name获取client
 // 注意：本方法直接返回client结果，是因为传入的name一定是写好的constant，而且一定已经成功初始化完成，否则程序不可能执行到这里，所以不用做任何判断
@@ -40,7 +34,7 @@ func InitClient(c *Config) (*mongo.Client, error) {
 	clientMapLock.Lock()
 	defer clientMapLock.Unlock()
 
-	if clientMap[c.ClientName] == nil {
+	if _, exist := clientMap[c.ClientName]; !exist {
 		client, err = connect(c)
 		if client != nil {
 			clientMap[c.ClientName] = client
@@ -51,15 +45,8 @@ func InitClient(c *Config) (*mongo.Client, error) {
 	return client, err
 }
 
-// connect 建立数据库连接
+// connect
 func connect(c *Config) (*mongo.Client, error) {
-	// tracer := NewTrace(true)
-	// monitor := &event.CommandMonitor{
-	// 	Started:   tracer.HandleStartedEvent,
-	// 	Succeeded: tracer.HandleSucceededEvent,
-	// 	Failed:    tracer.HandleFailedEvent,
-	// }
-
 	ctx, cancel := context.WithTimeout(context.Background(), DefaultConnectTimeout*time.Second)
 	defer cancel()
 
@@ -94,6 +81,10 @@ func connect(c *Config) (*mongo.Client, error) {
 		return nil, err
 	}
 	return client, nil
+}
+
+func init() {
+	go monitoring()
 }
 
 // monitoring 开启状态监控

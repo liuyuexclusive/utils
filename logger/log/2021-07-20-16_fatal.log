@@ -1,0 +1,2 @@
+2021-07-20T16:47:01.600+0800	FATAL	logger/zap_test.go:10	this is a test fatal error
+2021-07-20T16:47:58.647+0800	FATAL	logger/zap_test.go:10	this is a test fatal error

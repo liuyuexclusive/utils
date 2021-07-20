@@ -131,18 +131,6 @@ func (d *Dao) DefaultCtx() (context.Context, context.CancelFunc) {
 	return context.WithTimeout(context.Background(), DefaultQueryTimeout*time.Second)
 }
 
-// DecodeOne 处理DecodeOne的错误
-// deprecated 该方法容易引起panic，已经废弃
-func (d *Dao) DecodeOne(err error) error {
-	if err == mongo.ErrNoDocuments {
-		return nil
-	}
-	if err == nil {
-		return nil
-	}
-	return err
-}
-
 // HasDuplicatedError 是否是重复id写入错误
 func (d *Dao) HasDuplicatedError(err error) bool {
 	if err, ok := err.(mongo.WriteException); ok {
@@ -259,7 +247,6 @@ func (d *Dao) UseSession(ctx context.Context, fn func(mongo.SessionContext) erro
 }
 
 // Aggregate 聚合查询
-// Deprecated 使用AggregateSafe替换
 func (d *Dao) Aggregate(ctx context.Context, pipeline interface{}, opts ...*options.AggregateOptions) (*Cursor, error) {
 	return d.collection.Aggregate(ctx, pipeline, opts...)
 }

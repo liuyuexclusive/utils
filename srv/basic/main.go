@@ -22,11 +22,15 @@ import (
 	"github.com/yuexclusive/utils/srv/basic/proto/user"
 )
 
+var l = logger.Single()
+
+var sugar = l.Sugar()
+
 func main() {
 	tracer, closer, err := trace.Tracer()
 
 	if err != nil {
-		logger.Sugar.Fatal(err)
+		sugar.Fatal(err)
 	}
 
 	defer closer.Close()
@@ -34,11 +38,11 @@ func main() {
 	s, err := rpc.NewServer(
 		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
 			grpc_auth.StreamServerInterceptor(auth.AuthFunc),
-			grpc_zap.StreamServerInterceptor(logger.Logger),
+			grpc_zap.StreamServerInterceptor(l),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_auth.UnaryServerInterceptor(auth.AuthFunc),
-			grpc_zap.UnaryServerInterceptor(logger.Logger),
+			grpc_zap.UnaryServerInterceptor(l),
 			grpc_recovery.UnaryServerInterceptor(),
 			grpc_opentracing.UnaryServerInterceptor(grpc_opentracing.WithTracer(tracer)),
 			grpc_prometheus.UnaryServerInterceptor,
@@ -46,7 +50,7 @@ func main() {
 	)
 
 	if err != nil {
-		logger.Sugar.Fatal(err)
+		sugar.Fatal(err)
 	}
 
 	role.RegisterRoleServer(s.Server, new(role_handler.Handler))
@@ -58,5 +62,5 @@ func main() {
 		http.Handle("/metrics", promhttp.Handler())
 	}()
 
-	logger.Sugar.Fatal(s.Serve())
+	sugar.Fatal(s.Serve())
 }

@@ -33,7 +33,7 @@ func Dial(name string, token string, dialOptions ...grpc.DialOption) (io.Closer,
 	tracer, closer, err := trace.Tracer()
 
 	if err != nil {
-		logger.Sugar.Fatal(err)
+		logger.Single().Sugar().Fatal(err)
 	}
 
 	// defer closer.Close()

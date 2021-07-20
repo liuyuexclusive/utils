@@ -10,9 +10,7 @@ type Auth struct {
 
 // Config 配置
 type Config struct {
-	AppName    string
 	ClientName ClientName
 	Addr       string
 	Auth       *Auth
-	Trace      bool
 }

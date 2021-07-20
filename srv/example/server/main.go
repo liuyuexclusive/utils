@@ -26,15 +26,17 @@ func (h *handler) Send(ctx context.Context, req *hello.Request) (*hello.Response
 	return &hello.Response{Res: fmt.Sprintf("hello %s", req.Name)}, nil
 }
 
+var l = logger.Single()
+
 func main() {
 	server, err := rpc.NewServer(
 		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
 			grpc_auth.StreamServerInterceptor(auth.AuthFunc),
-			grpc_zap.StreamServerInterceptor(logger.Logger),
+			grpc_zap.StreamServerInterceptor(l),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_auth.UnaryServerInterceptor(auth.AuthFunc),
-			grpc_zap.UnaryServerInterceptor(logger.Logger),
+			grpc_zap.UnaryServerInterceptor(l),
 			grpc_recovery.UnaryServerInterceptor(),
 		)),
 	)

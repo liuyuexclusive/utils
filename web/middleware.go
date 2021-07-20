@@ -22,6 +22,8 @@ import (
 
 const contextTracerKey = "Tracer-context"
 
+var l = logger.Single()
+
 // sf sampling frequency
 var sf = 100
 
@@ -41,7 +43,7 @@ func Prometheus(engine *gin.Engine) {
 	engine.GET(path, func(c *gin.Context) {
 		p.Handler().ServeHTTP(c.Writer, c.Request)
 	})
-	logger.Logger.Info("open prometheus", zap.String("path", path))
+	l.Info("open prometheus", zap.String("path", path))
 }
 
 // Swagger
@@ -56,12 +58,12 @@ func Swagger(engine *gin.Engine) {
 	}
 	engine.GET(path, ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL(url)))
 
-	logger.Logger.Info("open swagger", zap.String("url", url), zap.String("path", path))
+	l.Info("open swagger", zap.String("url", url), zap.String("path", path))
 }
 
 // AllowOrigin
 func AllowOrigin() gin.HandlerFunc {
-	logger.Logger.Info("open allow origin")
+	l.Info("open allow origin")
 	return func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, AccessToken,X-CSRF-Token, Authorization, Token")
@@ -78,7 +80,7 @@ func AllowOrigin() gin.HandlerFunc {
 // RateLimite
 func RateLimite(duration time.Duration, capacity int64) gin.HandlerFunc {
 	bucket := ratelimit.NewBucket(duration, capacity)
-	logger.Logger.Info("open rate limit", zap.String("duration", duration.String()), zap.Int64("capacity", capacity))
+	l.Info("open rate limit", zap.String("duration", duration.String()), zap.Int64("capacity", capacity))
 	return func(c *gin.Context) {
 		available := bucket.TakeAvailable(1)
 		if available <= 0 {
@@ -103,7 +105,7 @@ func contextWithSpan(c *gin.Context) (ctx context.Context) {
 
 // Tracer
 func Tracer() gin.HandlerFunc {
-	logger.Logger.Info("open trace")
+	l.Info("open trace")
 
 	return func(c *gin.Context) {
 		md := make(map[string]string)
@@ -114,7 +116,7 @@ func Tracer() gin.HandlerFunc {
 		if err := opentracing.GlobalTracer().Inject(sp.Context(),
 			opentracing.TextMap,
 			opentracing.TextMapCarrier(md)); err != nil {
-			logger.Logger.Fatal(err.Error())
+			l.Fatal(err.Error())
 		}
 
 		ctx := context.TODO()
