@@ -3,6 +3,8 @@ module github.com/yuexclusive/utils
 go 1.16
 
 require (
+	github.com/DataDog/zstd v1.3.6-0.20190409195224-796139022798 // indirect
+	github.com/Shopify/sarama v1.29.1
 	github.com/ahmetb/go-linq v3.0.0+incompatible
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/codahale/hdrhistogram v0.0.0-20161010025455-3a0bb77429bd // indirect
@@ -38,6 +40,7 @@ require (
 	github.com/nats-io/nats.go v1.11.0
 	github.com/olivere/elastic/v7 v7.0.16
 	github.com/opentracing/opentracing-go v1.1.0
+	github.com/pkg/profile v1.2.1 // indirect
 	github.com/prometheus/client_golang v1.6.0
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sirupsen/logrus v1.6.0
@@ -55,14 +58,15 @@ require (
 	go.mongodb.org/mongo-driver v1.5.4
 	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/zap v1.16.0
-	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
-	golang.org/x/net v0.0.0-20210510120150-4163338589ed // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
-	golang.org/x/sys v0.0.0-20210511113859-b0526f3d8744 // indirect
 	golang.org/x/text v0.3.6 // indirect
 	golang.org/x/tools v0.1.1 // indirect
 	google.golang.org/grpc v1.32.0
 	google.golang.org/protobuf v1.26.0
+	gopkg.in/jcmturner/aescts.v1 v1.0.1 // indirect
+	gopkg.in/jcmturner/dnsutils.v1 v1.0.1 // indirect
+	gopkg.in/jcmturner/gokrb5.v7 v7.2.3 // indirect
+	gopkg.in/jcmturner/rpc.v1 v1.1.0 // indirect
 	gopkg.in/sohlich/elogrus.v7 v7.0.0
 	gopkg.in/yaml.v2 v2.4.0
 )
